@@ -25,7 +25,9 @@ final class TrackerViewController: UIViewController {
             header.topAnchor.constraint(equalTo: addTracker.bottomAnchor, constant: 0),
             header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             search.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 7),
-            search.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            search.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            search.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16)
+
         ])
         
     }
@@ -49,8 +51,8 @@ final class TrackerViewController: UIViewController {
         
         return header
     }
-    func searchTreckers() -> UISearchBar {
-        let search = UISearchBar()
+    func searchTreckers() -> UISearchTextField {
+        let search = UISearchTextField()
         view.addSubview(search)
         search.translatesAutoresizingMaskIntoConstraints = false
         search.placeholder = "Поиск"
