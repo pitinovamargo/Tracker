@@ -12,7 +12,7 @@ final class TabBarController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
                 
-        let trackerViewController = TrackerViewController()
+        let trackerViewController = UINavigationController(rootViewController: TrackerViewController())
         trackerViewController.tabBarItem = UITabBarItem(
             title: "Трекеры",
             image: UIImage(named: "Trackers"),
@@ -27,5 +27,12 @@ final class TabBarController: UITabBarController {
         )
         
         self.viewControllers = [trackerViewController, statisticViewController]
+        
+        let separatorImage = UIImage()
+
+        self.tabBar.shadowImage = separatorImage
+        self.tabBar.backgroundImage = separatorImage
+        self.tabBar.layer.borderWidth = 0.50
+        self.tabBar.clipsToBounds = true
     }
 }

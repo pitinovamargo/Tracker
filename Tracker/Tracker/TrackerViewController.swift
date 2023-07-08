@@ -16,20 +16,25 @@ final class TrackerViewController: UIViewController {
         let addTracker = addTrackerButton()
         let header = header()
         let search = searchTreckers()
+        let date = datePicker()
+        let logo = emptyTrackersLogo()
+        let text = emptyTrackersText()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTracker)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: date)
         
         NSLayoutConstraint.activate([
-            addTracker.heightAnchor.constraint(equalToConstant: 42),
-            addTracker.widthAnchor.constraint(equalToConstant: 42),
-            addTracker.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
-            addTracker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 6),
-            header.topAnchor.constraint(equalTo: addTracker.bottomAnchor, constant: 0),
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             search.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 7),
             search.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            search.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16)
-
+            search.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
+            logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logo.topAnchor.constraint(equalTo: search.bottomAnchor, constant: 220),
+            logo.heightAnchor.constraint(equalToConstant: 80),
+            logo.widthAnchor.constraint(equalToConstant: 80),
+            text.centerXAnchor.constraint(equalTo: logo.centerXAnchor),
+            text.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 8)
         ])
-        
     }
     
     func addTrackerButton() -> UIButton {
@@ -58,5 +63,32 @@ final class TrackerViewController: UIViewController {
         search.placeholder = "Поиск"
         
         return search
+    }
+    func datePicker() -> UIDatePicker {
+        let date = UIDatePicker()
+        view.addSubview(date)
+        date.translatesAutoresizingMaskIntoConstraints = false
+        date.preferredDatePickerStyle = .compact
+        date.datePickerMode = .date
+        
+        return date
+    }
+    func emptyTrackersLogo() -> UIImageView {
+        let logo = UIImageView()
+        view.addSubview(logo)
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "Empty trackers")
+        
+        return logo
+    }
+    func emptyTrackersText() -> UILabel {
+        let text = UILabel()
+        view.addSubview(text)
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.text = "Что будем отслеживать?"
+        text.textColor = .ypBlackDay
+        text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        
+        return text
     }
 }
