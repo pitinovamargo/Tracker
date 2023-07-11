@@ -8,18 +8,36 @@
 import UIKit
 
 final class TrackersCollectionCell: UICollectionViewCell {
-    let titleLabel = UILabel()
-    // Идентификатор ячейки — используется для регистрации и восстановления:
+    let dayCount = UILabel()
+    let descriptionCard = UILabel()
+    let colorCard = UIView()
+    let buttonCheck = UIButton()
     
-    override init(frame: CGRect) {                  // 1
-        super.init(frame: frame)                    // 2
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-        contentView.addSubview(titleLabel)          // 3
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false    // 4
-       
-       NSLayoutConstraint.activate([                                    // 5
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        contentView.layer.cornerRadius = 5
+        contentView.layer.masksToBounds = true
+        
+        contentView.addSubview(dayCount)
+        contentView.addSubview(descriptionCard)
+        contentView.addSubview(colorCard)
+        contentView.addSubview(buttonCheck)
+        
+        dayCount.translatesAutoresizingMaskIntoConstraints = false
+        descriptionCard.translatesAutoresizingMaskIntoConstraints = false
+        colorCard.translatesAutoresizingMaskIntoConstraints = false
+        buttonCheck.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            colorCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),
+            colorCard.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            descriptionCard.leadingAnchor.constraint(equalTo: colorCard.leadingAnchor, constant: 12),
+            descriptionCard.bottomAnchor.constraint(equalTo: colorCard.bottomAnchor, constant: 12),
+            buttonCheck.topAnchor.constraint(equalTo: colorCard.bottomAnchor, constant: 8),
+            buttonCheck.trailingAnchor.constraint(equalTo: colorCard.trailingAnchor, constant: -12),
+            dayCount.topAnchor.constraint(equalTo: colorCard.bottomAnchor, constant: 16),
+            dayCount.leadingAnchor.constraint(equalTo: colorCard.leadingAnchor, constant: 12)
         ])
     }
     

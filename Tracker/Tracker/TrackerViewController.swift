@@ -9,13 +9,21 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    private let trackersCards = [
-        "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к",
-        "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц",
-        "ч", "ш" , "щ", "ъ", "ы", "ь", "э", "ю", "я"
+//    private let letters = [
+//        "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к",
+//        "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц",
+//        "ч", "ш" , "щ", "ъ", "ы", "ь", "э", "ю", "я"
+//    ]
+    private let colors: [UIColor] = [
+        .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
+        .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
+        .ypColorSelection7, .ypColorSelection8, .ypColorSelection9,
+        .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
+        .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
+        .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
     ]
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,15 +134,17 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trackersCards.count
+        return colors.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackersCollectionCell else {
-            fatalError("Unable to dequeue LetterCollectionViewCell")
+            return UICollectionViewCell()
         }
+        cell.prepareForReuse()
+        cell.contentView.backgroundColor = colors[Int.random(in: 0..<colors.count)]
 
-        cell.titleLabel.text = trackersCards[indexPath.row]
+//        cell.titleLabel.text = letters[indexPath.row]
         return cell
     }
 }
@@ -142,7 +152,6 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
         return CGSize(width: collectionView.bounds.width / 2, height: 50)
     }
     
@@ -154,5 +163,4 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: UICollectionViewDelegate {
 
 }
-
 

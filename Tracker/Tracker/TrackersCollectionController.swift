@@ -7,32 +7,63 @@
 
 //import UIKit
 //
-//final class TrackersCollectionController: UIViewController {
-//    private let letters = [
-//        "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к",
-//        "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц",
-//        "ч", "ш" , "щ", "ъ", "ы", "ь", "э", "ю", "я"
+//final class TrackersCollection: NSObject, UICollectionViewDataSource {
+//    private let colors: [UIColor] = [
+//        .black, .blue, .brown,
+//        .cyan, .green, .orange,
+//        .red, .purple, .yellow
 //    ]
-//    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 //    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        let collectionView = collectionView // создаем коллекцию
-//        view.addSubview(collectionView)
-//        
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        NSLayoutConstraint.activate([ // настраиваем констрейнты коллекции
-//            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-//                                    ])
-//        collectionView.dataSource = self
-//        collectionView.delegate = self
-//        //        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell") // инициализируем ячейку коллекции по id из сториборда
-//        collectionView.register(TrackersCollectionCell.self, forCellWithReuseIdentifier: "cell") // регистрируем класс для обращения к ячейке коллекции
-//        
-//        collectionView.allowsMultipleSelection = false
+//    let count: Int
+//    
+//    init(count: Int) {
+//        self.count = count
 //    }
+//    
+//    func viewDidLoad() {
+//        
+//        // Размеры для коллекции:
+//        let size = CGRect(origin: CGPoint(x: 0, y: 0),
+//                          size: CGSize(width: 400, height: 600))
+//        // Указываем, какой Layout хотим использовать:
+//        let layout = UICollectionViewFlowLayout()
+//        
+//        let helper = TrackersCollection(count: 31)
+//        let collection = UICollectionView(frame: size,
+//                                          collectionViewLayout: layout)
+//        // Регистрируем ячейку в коллекции.
+//        // Регистрируя ячейку, мы сообщаем коллекции, какими типами ячеек она может распоряжаться.
+//        // При попытке создать ячейку с незарегистрированным идентификатором коллекция выдаст ошибку.
+//        collection.register(TrackersCollectionCell.self, forCellWithReuseIdentifier: TrackersCollectionCell.identifier)
+//        collection.backgroundColor = .lightGray
+//        collection.dataSource = helper
+//        
+//        collection.reloadData()
+//    }
+//    
+//    // MARK: - UICollectionViewDataSource
+//    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        numberOfItemsInSection section: Int) -> Int {
+//        return count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersCollectionCell.identifier,
+//                                                            
+//                                                            for: indexPath) as? TrackersCollectionCell else {
+//            return UICollectionViewCell()
+//        }
+//        
+//        cell.prepareForReuse()
+//        
+//        // Произвольно выбираем цвет для фона ячейки:
+//        cell.contentView.backgroundColor = colors[Int.random(in: 0..<colors.count)]
+//        
+//        return cell
+//    }
+//    
+//    // MARK: - UICollectionViewDelegateFlowLayout
+//    
 //}
