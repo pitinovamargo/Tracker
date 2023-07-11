@@ -12,8 +12,8 @@ final class TabBarController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
                 
-        let trackerViewController = UINavigationController(rootViewController: TrackerViewController())
-        trackerViewController.tabBarItem = UITabBarItem(
+        let trackersViewController = UINavigationController(rootViewController: TrackersViewController())
+        trackersViewController.tabBarItem = UITabBarItem(
             title: "Трекеры",
             image: UIImage(named: "Trackers"),
             selectedImage: nil
@@ -26,7 +26,7 @@ final class TabBarController: UITabBarController {
             selectedImage: nil
         )
         
-        self.viewControllers = [trackerViewController, statisticViewController]
+        self.viewControllers = [trackersViewController, statisticViewController]
         
         let separatorImage = UIImage()
 

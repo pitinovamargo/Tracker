@@ -17,6 +17,8 @@
 		647575642A589BF000C57C04 /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575632A589BF000C57C04 /* TrackerViewController.swift */; };
 		647575662A589C2300C57C04 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575652A589C2300C57C04 /* StatisticViewController.swift */; };
 		6475756A2A58AABD00C57C04 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 647575692A58AABD00C57C04 /* Launch Screen.storyboard */; };
+		6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */; };
+		6475756E2A5C345500C57C04 /* TrackersCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475756D2A5C345500C57C04 /* TrackersCollectionController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		647575632A589BF000C57C04 /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
 		647575652A589C2300C57C04 /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		647575692A58AABD00C57C04 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionCell.swift; sourceTree = "<group>"; };
+		6475756D2A5C345500C57C04 /* TrackersCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +111,8 @@
 			isa = PBXGroup;
 			children = (
 				647575632A589BF000C57C04 /* TrackerViewController.swift */,
+				6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */,
+				6475756D2A5C345500C57C04 /* TrackersCollectionController.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -184,7 +190,9 @@
 			files = (
 				6460DF5A2A408EB3004A31C6 /* ViewController.swift in Sources */,
 				641441B22A560189004D6BD7 /* UIColor+Extensions.swift in Sources */,
+				6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */,
 				6460DF562A408EB3004A31C6 /* AppDelegate.swift in Sources */,
+				6475756E2A5C345500C57C04 /* TrackersCollectionController.swift in Sources */,
 				647575622A5899CF00C57C04 /* TabBarController.swift in Sources */,
 				647575642A589BF000C57C04 /* TrackerViewController.swift in Sources */,
 				6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */,
