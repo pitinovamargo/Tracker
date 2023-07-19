@@ -9,19 +9,9 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-//    private let letters = [
-//        "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к",
-//        "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц",
-//        "ч", "ш" , "щ", "ъ", "ы", "ь", "э", "ю", "я"
-//    ]
-    private let colors: [UIColor] = [
-        .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
-        .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
-        .ypColorSelection7, .ypColorSelection8, .ypColorSelection9,
-        .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
-        .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
-        .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
-    ]
+    private var trackers: [Tracker] = []
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -38,16 +28,29 @@ final class TrackersViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTracker)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: date)
         
+        //        for category in categories {
+        /**
+         CustomUICollectionView: UICollectionView {
+         private let category: Category?
+         override func init(category: Category) {
+         self.category = category
+         }
+         }
+         
+         CustomUICollectionView: UICollectionViewDataSource {
+         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+         return self.category.trackers.count
+         }
+         }
+         */
+        //            view.addSubview(CustomUICollectionView(category))
+        //        }
         
         
-       
-        let collectionView = collectionView // создаем коллекцию
+        let collectionView = collectionView
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -61,18 +64,15 @@ final class TrackersViewController: UIViewController {
             logo.widthAnchor.constraint(equalToConstant: 80),
             text.centerXAnchor.constraint(equalTo: logo.centerXAnchor),
             text.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 8),
-            
             collectionView.topAnchor.constraint(equalTo: search.bottomAnchor, constant: 24),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         
-        
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TrackersCollectionCell.self, forCellWithReuseIdentifier: "cell") // регистрируем класс для обращения к ячейке коллекции
-        
+        collectionView.register(TrackersCollectionCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.allowsMultipleSelection = false
     }
     
@@ -134,7 +134,7 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return colors.count
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -142,9 +142,11 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.prepareForReuse()
-        cell.contentView.backgroundColor = colors[Int.random(in: 0..<colors.count)]
 
-//        cell.titleLabel.text = letters[indexPath.row]
+        cell.setupCell(daysAmount: "5 дней")
+        cell.trackerDescription.text = "Поливать растения"
+        cell.trackerEmoji.text = "😜"
+        
         return cell
     }
 }
@@ -152,15 +154,28 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2, height: 50)
+        return CGSize(width: collectionView.bounds.width / 2 - 5, height: (collectionView.bounds.width / 2 - 5) * 0.88)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 9
     }
 }
 
-extension TrackersViewController: UICollectionViewDelegate {
-
+struct Tracker {
+    let id: UInt
+    let name: String
+    let color: UIColor
+    let emoji: String
+    let schedule: Date
 }
 
+struct TrackerCategory {
+    let header: String
+    let trackers: [Tracker]
+}
+
+struct TrackerRecord {
+    let idTracker: UInt
+    let date: Date
+}
