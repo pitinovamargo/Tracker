@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackersCollectionCell: UICollectionViewCell {
     
+    static var reuseId = "cell"
+    
     var trackersDaysAmount: UILabel = UILabel()
     var trackerDescription: UILabel = UILabel()
     var completedTrackerButton: UIButton = UIButton(type: .custom)
@@ -33,14 +35,12 @@ final class TrackersCollectionCell: UICollectionViewCell {
         configureLables()
         
         NSLayoutConstraint.activate([
-            trackersDaysAmount.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 106),
+            trackersDaysAmount.topAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: 16),
             trackersDaysAmount.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             trackerDescription.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
             trackerDescription.bottomAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: -12),
             completedTrackerButton.centerYAnchor.constraint(equalTo: trackersDaysAmount.centerYAnchor),
             completedTrackerButton.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12),
-//            emojiBackground.topAnchor.constraint(equalTo: trackerCard.topAnchor, constant: 12),
-//            emojiBackground.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
             trackerEmoji.centerXAnchor.constraint(equalTo: emojiBackground.centerXAnchor),
             trackerEmoji.centerYAnchor.constraint(equalTo: emojiBackground.centerYAnchor),
         ])
@@ -58,7 +58,7 @@ final class TrackersCollectionCell: UICollectionViewCell {
         trackersDaysAmount.textColor = .ypBlackDay
         
         contentView.addSubview(trackerCard)
-        trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height * 0.6)
+        trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width * 0.55)
         trackerCard.backgroundColor = colors[Int.random(in: 0..<colors.count)]
         trackerCard.layer.cornerRadius = 16
         
