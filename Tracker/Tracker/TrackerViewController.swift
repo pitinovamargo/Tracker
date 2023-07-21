@@ -73,7 +73,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(addTracker)
         addTracker.setImage(UIImage(named: "Add tracker"), for: .normal)
         addTracker.translatesAutoresizingMaskIntoConstraints = false
-        //        addTracker.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
+        addTracker.addTarget(self, action: #selector(didTapAddTracker), for: .touchUpInside)
         
         return addTracker
     }
@@ -121,6 +121,11 @@ final class TrackersViewController: UIViewController {
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         return text
+    }
+    
+    @objc private func didTapAddTracker() {
+        let addTracker = AddTrackersViewController()
+        present(addTracker, animated: true, completion: nil)
     }
 }
 

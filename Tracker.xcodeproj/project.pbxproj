@@ -19,6 +19,7 @@
 		6475756A2A58AABD00C57C04 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 647575692A58AABD00C57C04 /* Launch Screen.storyboard */; };
 		6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */; };
 		647575722A681CD800C57C04 /* HeaderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575712A681CD800C57C04 /* HeaderSectionView.swift */; };
+		647575742A6B23EC00C57C04 /* AddTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		647575692A58AABD00C57C04 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionCell.swift; sourceTree = "<group>"; };
 		647575712A681CD800C57C04 /* HeaderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSectionView.swift; sourceTree = "<group>"; };
+		647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				647575632A589BF000C57C04 /* TrackerViewController.swift */,
 				6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */,
 				647575712A681CD800C57C04 /* HeaderSectionView.swift */,
+				647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */,
 				647575722A681CD800C57C04 /* HeaderSectionView.swift in Sources */,
 				6460DF562A408EB3004A31C6 /* AppDelegate.swift in Sources */,
+				647575742A6B23EC00C57C04 /* AddTrackersViewController.swift in Sources */,
 				647575622A5899CF00C57C04 /* TabBarController.swift in Sources */,
 				647575642A589BF000C57C04 /* TrackerViewController.swift in Sources */,
 				6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */,

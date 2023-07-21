@@ -9,17 +9,11 @@ import UIKit
 
 final class HeaderSectionView: UICollectionReusableView {
     static let id = "header"
-    let title = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        title.text = "Утренняя рутина"
-        title.textColor = .ypBlackDay
-        title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        title.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(title)
-        title.frame = CGRect(x: 0, y: 0, width: 300, height: 50)
+        let title = configureHeader()
         
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: topAnchor, constant: 12),
@@ -31,7 +25,15 @@ final class HeaderSectionView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureHeader() {
+    func configureHeader() -> UILabel {
+        let title = UILabel()
+        title.text = "Утренняя рутина"
+        title.textColor = .ypBlackDay
+        title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(title)
+        title.frame = CGRect(x: 0, y: 0, width: 300, height: 50)
         
+        return title
     }
 }
