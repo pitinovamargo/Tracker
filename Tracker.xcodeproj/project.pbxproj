@@ -20,6 +20,8 @@
 		6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */; };
 		647575722A681CD800C57C04 /* HeaderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575712A681CD800C57C04 /* HeaderSectionView.swift */; };
 		647575742A6B23EC00C57C04 /* AddTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */; };
+		647575762A6EB6B500C57C04 /* CreatingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575752A6EB6B500C57C04 /* CreatingTrackerViewController.swift */; };
+		647575782A6EC67800C57C04 /* CreatingTrackerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647575772A6EC67800C57C04 /* CreatingTrackerViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionCell.swift; sourceTree = "<group>"; };
 		647575712A681CD800C57C04 /* HeaderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSectionView.swift; sourceTree = "<group>"; };
 		647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackersViewController.swift; sourceTree = "<group>"; };
+		647575752A6EB6B500C57C04 /* CreatingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingTrackerViewController.swift; sourceTree = "<group>"; };
+		647575772A6EC67800C57C04 /* CreatingTrackerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingTrackerViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,8 @@
 				6475756B2A5C2D6100C57C04 /* TrackersCollectionCell.swift */,
 				647575712A681CD800C57C04 /* HeaderSectionView.swift */,
 				647575732A6B23EC00C57C04 /* AddTrackersViewController.swift */,
+				647575752A6EB6B500C57C04 /* CreatingTrackerViewController.swift */,
+				647575772A6EC67800C57C04 /* CreatingTrackerViewCell.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -191,11 +197,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				647575782A6EC67800C57C04 /* CreatingTrackerViewCell.swift in Sources */,
 				6460DF5A2A408EB3004A31C6 /* ViewController.swift in Sources */,
 				641441B22A560189004D6BD7 /* UIColor+Extensions.swift in Sources */,
 				6475756C2A5C2D6100C57C04 /* TrackersCollectionCell.swift in Sources */,
 				647575722A681CD800C57C04 /* HeaderSectionView.swift in Sources */,
 				6460DF562A408EB3004A31C6 /* AppDelegate.swift in Sources */,
+				647575762A6EB6B500C57C04 /* CreatingTrackerViewController.swift in Sources */,
 				647575742A6B23EC00C57C04 /* AddTrackersViewController.swift in Sources */,
 				647575622A5899CF00C57C04 /* TabBarController.swift in Sources */,
 				647575642A589BF000C57C04 /* TrackerViewController.swift in Sources */,

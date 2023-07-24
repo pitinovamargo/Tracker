@@ -27,11 +27,13 @@ class AddTrackersViewController: UIViewController {
             header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 295),
             habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            habitButton.widthAnchor.constraint(equalToConstant: 335),
+            habitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            habitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             habitButton.heightAnchor.constraint(equalToConstant: 60),
             irregularButton.topAnchor.constraint(equalTo: habitButton.bottomAnchor, constant: 16),
             irregularButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            irregularButton.widthAnchor.constraint(equalToConstant: 335),
+            irregularButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            irregularButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             irregularButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
@@ -76,7 +78,9 @@ class AddTrackersViewController: UIViewController {
     }
     
     @objc private func habitButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        
+        let addHabit = CreatingTrackerViewController()
+        present(addHabit, animated: true, completion: nil)
     }
     
     @objc private func irregularButtonTapped() {
