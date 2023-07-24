@@ -9,7 +9,7 @@ import UIKit
 
 final class CreatingTrackerViewController: UIViewController {
     
-    let cellReuseIdentifier = "CustomTableViewCell"
+    let cellReuseIdentifier = "CreateTrackersTableViewCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,8 +119,7 @@ final class CreatingTrackerViewController: UIViewController {
     }
     
     @objc private func cancelButtonTapped() {
-        let addTracker = AddTrackersViewController()
-        present(addTracker, animated: true, completion: nil)
+        dismiss(animated: true)
     }
     
     @objc private func createButtonTapped() {
@@ -151,7 +150,9 @@ extension CreatingTrackerViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Обработка нажатия на ячейку
+        if indexPath.row == 1 {
+            present(ScheduleViewController(), animated: true, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

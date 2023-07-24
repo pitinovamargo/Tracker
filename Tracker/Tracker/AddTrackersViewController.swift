@@ -26,12 +26,10 @@ class AddTrackersViewController: UIViewController {
             header.topAnchor.constraint(equalTo: view.topAnchor, constant: 26),
             header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 295),
-            habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             habitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             habitButton.heightAnchor.constraint(equalToConstant: 60),
             irregularButton.topAnchor.constraint(equalTo: habitButton.bottomAnchor, constant: 16),
-            irregularButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             irregularButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             irregularButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             irregularButton.heightAnchor.constraint(equalToConstant: 60)
