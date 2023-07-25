@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackersCollectionCell: UICollectionViewCell {
+final class TrackerCollectionCell: UICollectionViewCell {
     
     static var reuseId = "cell"
     

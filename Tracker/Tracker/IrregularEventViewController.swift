@@ -11,7 +11,7 @@ final class IrregularEventViewController: UIViewController {
 
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
     let clearButton = UIButton(type: .custom)
-
+    let createButton = UIButton(type: .custom)
     let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ final class IrregularEventViewController: UIViewController {
         view.addSubview(irregularEventTableView)
         
         let cancelButton = cancelButton()
-        let createButton = createButton()
+        configureCreateButton()
         setupClearButton()
         
         addEventName.delegate = self
@@ -116,8 +116,7 @@ final class IrregularEventViewController: UIViewController {
         return cancelButton
     }
     
-    func createButton() -> UIButton {
-        let createButton = UIButton(type: .custom)
+    func configureCreateButton() {
         view.addSubview(createButton)
         createButton.setTitleColor(.ypWhiteDay, for: .normal)
         createButton.backgroundColor = .ypGray
@@ -126,7 +125,7 @@ final class IrregularEventViewController: UIViewController {
         createButton.setTitle("Создать", for: .normal)
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         createButton.translatesAutoresizingMaskIntoConstraints = false
-        return createButton
+        createButton.isEnabled = false
     }
     
     @objc func clearTextField() {
@@ -167,6 +166,13 @@ extension IrregularEventViewController: UITableViewDelegate, UITableViewDataSour
 extension IrregularEventViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
+        if textField.text?.isEmpty ?? false {
+            createButton.isEnabled = false
+            createButton.backgroundColor = .ypGray
+        } else {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .ypBlackDay
+        }
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
