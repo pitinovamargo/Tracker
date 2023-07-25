@@ -108,6 +108,10 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.addSubview(separatorView)
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        scheduleTableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 enum WeekDay: String {

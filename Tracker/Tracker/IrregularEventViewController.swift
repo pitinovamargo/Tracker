@@ -79,7 +79,7 @@ final class IrregularEventViewController: UIViewController {
             irregularEventTableView.topAnchor.constraint(equalTo: addEventName.bottomAnchor, constant: 24),
             irregularEventTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             irregularEventTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            irregularEventTableView.heightAnchor.constraint(equalToConstant: 149),
+            irregularEventTableView.heightAnchor.constraint(equalToConstant: 75),
             cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(view.frame.width/2) - 4),
@@ -128,7 +128,7 @@ final class IrregularEventViewController: UIViewController {
     }
     
     @objc func clearTextField() {
-        addTrackerName.text = ""
+        addEventName.text = ""
        }
     
     @objc private func cancelButtonTapped() {
@@ -138,5 +138,26 @@ final class IrregularEventViewController: UIViewController {
     @objc private func createButtonTapped() {
         
     }
+}
 
+extension IrregularEventViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: irregularEventCellReuseIdentifier, for: indexPath) as! IrregularEventCell
+        
+            cell.titleLabel.text = "Категория"
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        irregularEventTableView.deselectRow(at: indexPath, animated: true)
+    }
 }

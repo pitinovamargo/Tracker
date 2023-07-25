@@ -74,10 +74,12 @@ final class AddTrackersViewController: UIViewController {
     
     @objc private func habitButtonTapped() {
         let addHabit = CreateTrackerViewController()
-        present(addHabit, animated: true, completion: nil)
+        present(addHabit, animated: true)
     }
     
     @objc private func irregularButtonTapped() {
+        let addEvent = IrregularEventViewController()
+        present(addEvent, animated: true)
     }
     
 }
