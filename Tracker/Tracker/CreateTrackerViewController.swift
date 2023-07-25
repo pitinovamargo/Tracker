@@ -10,7 +10,8 @@ import UIKit
 final class CreateTrackerViewController: UIViewController {
     
     let cellReuseIdentifier = "CreateTrackersTableViewCell"
-    
+    let clearButton = UIButton(type: .custom)
+
     let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -30,6 +31,7 @@ final class CreateTrackerViewController: UIViewController {
         addTrackerName.leftView = leftView
         addTrackerName.leftViewMode = .always
         addTrackerName.keyboardType = .default
+        addTrackerName.returnKeyType = .done
         addTrackerName.becomeFirstResponder()
         return addTrackerName
     }()
@@ -44,20 +46,16 @@ final class CreateTrackerViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
-        
+    
         view.addSubview(header)
         view.addSubview(addTrackerName)
         view.addSubview(trackersTableView)
         
         let cancelButton = cancelButton()
         let createButton = createButton()
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
-        paddingView.addSubview(clearButton())
-        
-        addTrackerName.rightView = paddingView
-        addTrackerName.rightViewMode = .whileEditing
+        setupClearButton()
 
-        
+        addTrackerName.delegate = self
         trackersTableView.delegate = self
         trackersTableView.dataSource = self
         trackersTableView.register(CreateTrackerViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
@@ -91,13 +89,17 @@ final class CreateTrackerViewController: UIViewController {
         ])
     }
     
-    func clearButton() -> UIButton {
-        let clearButton = UIButton(type: .custom)
+    func setupClearButton() {
         clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
         clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
         clearButton.contentMode = .scaleAspectFit
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        return clearButton
+        clearButton.isHidden = true
+
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
+        paddingView.addSubview(clearButton)
+        addTrackerName.rightView = paddingView
+        addTrackerName.rightViewMode = .whileEditing
     }
     
     func cancelButton() -> UIButton {
@@ -129,6 +131,7 @@ final class CreateTrackerViewController: UIViewController {
     
     @objc func clearTextField() {
         addTrackerName.text = ""
+        clearButton.isHidden = true
        }
     
     @objc private func cancelButtonTapped() {
@@ -178,7 +181,18 @@ extension CreateTrackerViewController: UITableViewDelegate, UITableViewDataSourc
         
         let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
         separatorView.backgroundColor = .ypGray
-        
+    
         cell.addSubview(separatorView)
+    }
+}
+
+extension CreateTrackerViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        clearButton.isHidden = textField.text?.isEmpty ?? true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

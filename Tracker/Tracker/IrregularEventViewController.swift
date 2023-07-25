@@ -10,7 +10,8 @@ import UIKit
 final class IrregularEventViewController: UIViewController {
 
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
-    
+    let clearButton = UIButton(type: .custom)
+
     let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -29,6 +30,7 @@ final class IrregularEventViewController: UIViewController {
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         addTrackerName.leftView = leftView
         addTrackerName.leftViewMode = .always
+        addTrackerName.returnKeyType = .done
         addTrackerName.keyboardType = .default
         addTrackerName.becomeFirstResponder()
         return addTrackerName
@@ -51,13 +53,9 @@ final class IrregularEventViewController: UIViewController {
         
         let cancelButton = cancelButton()
         let createButton = createButton()
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
-        paddingView.addSubview(clearButton())
+        setupClearButton()
         
-        addEventName.rightView = paddingView
-        addEventName.rightViewMode = .whileEditing
-
-        
+        addEventName.delegate = self
         irregularEventTableView.delegate = self
         irregularEventTableView.dataSource = self
         irregularEventTableView.register(IrregularEventCell.self, forCellReuseIdentifier: irregularEventCellReuseIdentifier)
@@ -91,13 +89,17 @@ final class IrregularEventViewController: UIViewController {
         ])
     }
     
-    func clearButton() -> UIButton {
-        let clearButton = UIButton(type: .custom)
+    func setupClearButton() {
         clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
         clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
         clearButton.contentMode = .scaleAspectFit
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        return clearButton
+        clearButton.isHidden = true
+
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
+        paddingView.addSubview(clearButton)
+        addEventName.rightView = paddingView
+        addEventName.rightViewMode = .whileEditing
     }
     
     func cancelButton() -> UIButton {
@@ -159,5 +161,16 @@ extension IrregularEventViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         irregularEventTableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension IrregularEventViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        clearButton.isHidden = textField.text?.isEmpty ?? true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
