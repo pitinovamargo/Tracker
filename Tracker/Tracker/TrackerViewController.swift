@@ -23,20 +23,62 @@ final class TrackersViewController: UIViewController {
         .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
     ]
     
+    let header: UILabel = {
+        let header = UILabel()
+        header.translatesAutoresizingMaskIntoConstraints = false
+        header.text = "Трекеры"
+        header.textColor = .ypBlackDay
+        header.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        return header
+    }()
+    
+    let searchTreckers: UISearchTextField = {
+        let searchTreckers = UISearchTextField()
+        searchTreckers.translatesAutoresizingMaskIntoConstraints = false
+        searchTreckers.placeholder = "Поиск"
+        return searchTreckers
+    }()
+    
+    let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        return datePicker
+    }()
+    
+    let emptyTrackersLogo: UIImageView = {
+        let emptyTrackersLogo = UIImageView()
+        emptyTrackersLogo.translatesAutoresizingMaskIntoConstraints = false
+        emptyTrackersLogo.image = UIImage(named: "Empty trackers")
+        return emptyTrackersLogo
+    }()
+    
+    let emptyTrackersText: UILabel = {
+        let emptyTrackersText = UILabel()
+        emptyTrackersText.translatesAutoresizingMaskIntoConstraints = false
+        emptyTrackersText.text = "Что будем отслеживать?"
+        emptyTrackersText.textColor = .ypBlackDay
+        emptyTrackersText.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        return emptyTrackersText
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         let tracker = Tracker(name: "some", color: .ypColorSelection1, emoji: "😜", schedule: 8)
         categories.append(TrackerCategory(header: "Утренняя рутина", trackers: [tracker]))
         
-        let addTracker = addTrackerButton()
-        let header = header()
-        let search = searchTreckers()
-        let date = datePicker()
-        let logo = emptyTrackersLogo()
-        let text = emptyTrackersText()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTracker)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: date)
+        view.addSubview(header)
+        view.addSubview(searchTreckers)
+        view.addSubview(datePicker)
+        view.addSubview(emptyTrackersLogo)
+        view.addSubview(emptyTrackersText)
+        
+        let addTrackerButton = addTrackerButton()
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         
         let collectionView = collectionView
         view.addSubview(collectionView)
@@ -46,16 +88,16 @@ final class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            search.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 7),
-            search.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            search.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
-            logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: search.bottomAnchor, constant: 220),
-            logo.heightAnchor.constraint(equalToConstant: 80),
-            logo.widthAnchor.constraint(equalToConstant: 80),
-            text.centerXAnchor.constraint(equalTo: logo.centerXAnchor),
-            text.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 8),
-            collectionView.topAnchor.constraint(equalTo: search.bottomAnchor, constant: 24),
+            searchTreckers.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 7),
+            searchTreckers.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            searchTreckers.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
+            emptyTrackersLogo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyTrackersLogo.topAnchor.constraint(equalTo: searchTreckers.bottomAnchor, constant: 220),
+            emptyTrackersLogo.heightAnchor.constraint(equalToConstant: 80),
+            emptyTrackersLogo.widthAnchor.constraint(equalToConstant: 80),
+            emptyTrackersText.centerXAnchor.constraint(equalTo: emptyTrackersLogo.centerXAnchor),
+            emptyTrackersText.topAnchor.constraint(equalTo: emptyTrackersLogo.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: searchTreckers.bottomAnchor, constant: 24),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
@@ -69,60 +111,14 @@ final class TrackersViewController: UIViewController {
     }
     
     func addTrackerButton() -> UIButton {
-        let addTracker = UIButton()
-        view.addSubview(addTracker)
-        addTracker.setImage(UIImage(named: "Add tracker"), for: .normal)
-        addTracker.translatesAutoresizingMaskIntoConstraints = false
-        addTracker.addTarget(self, action: #selector(didTapAddTracker), for: .touchUpInside)
-        
-        return addTracker
+        let addTrackerButton = UIButton()
+        view.addSubview(addTrackerButton)
+        addTrackerButton.setImage(UIImage(named: "Add tracker"), for: .normal)
+        addTrackerButton.translatesAutoresizingMaskIntoConstraints = false
+        addTrackerButton.addTarget(self, action: #selector(didTapAddTracker), for: .touchUpInside)
+        return addTrackerButton
     }
-    func header() -> UILabel {
-        let header = UILabel()
-        view.addSubview(header)
-        header.translatesAutoresizingMaskIntoConstraints = false
-        header.text = "Трекеры"
-        header.textColor = .ypBlackDay
-        header.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        
-        return header
-    }
-    func searchTreckers() -> UISearchTextField {
-        let search = UISearchTextField()
-        view.addSubview(search)
-        search.translatesAutoresizingMaskIntoConstraints = false
-        search.placeholder = "Поиск"
-        
-        return search
-    }
-    func datePicker() -> UIDatePicker {
-        let date = UIDatePicker()
-        view.addSubview(date)
-        date.translatesAutoresizingMaskIntoConstraints = false
-        date.preferredDatePickerStyle = .compact
-        date.datePickerMode = .date
-        
-        return date
-    }
-    func emptyTrackersLogo() -> UIImageView {
-        let logo = UIImageView()
-        view.addSubview(logo)
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "Empty trackers")
-        
-        return logo
-    }
-    func emptyTrackersText() -> UILabel {
-        let text = UILabel()
-        view.addSubview(text)
-        text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Что будем отслеживать?"
-        text.textColor = .ypBlackDay
-        text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        
-        return text
-    }
-    
+
     @objc private func didTapAddTracker() {
         let addTracker = AddTrackersViewController()
         present(addTracker, animated: true, completion: nil)

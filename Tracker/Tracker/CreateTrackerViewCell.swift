@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CreatingTrackerViewCell: UITableViewCell {
+final class CreateTrackerViewCell: UITableViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()

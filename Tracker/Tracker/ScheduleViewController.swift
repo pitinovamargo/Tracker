@@ -11,21 +11,37 @@ class ScheduleViewController: UIViewController {
     
     let scheduleCellReuseIdentifier = "ScheduleTableViewCell"
     
+    let header: UILabel = {
+        let header = UILabel()
+        header.translatesAutoresizingMaskIntoConstraints = false
+        header.text = "Расписание"
+        header.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        header.textColor = .ypBlackDay
+        return header
+    }()
+    
+    let scheduleTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
-        let tableView = scheduleTableView()
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(ScheduleViewCell.self, forCellReuseIdentifier: scheduleCellReuseIdentifier)
-        tableView.layer.cornerRadius = 16
-        tableView.separatorStyle = .none
+        view.addSubview(header)
+        view.addSubview(scheduleTableView)
         
-        let header = header()
         let doneScheduleButton = doneScheduleButton()
-        
+
+        scheduleTableView.delegate = self
+        scheduleTableView.dataSource = self
+        scheduleTableView.register(ScheduleViewCell.self, forCellReuseIdentifier: scheduleCellReuseIdentifier)
+        scheduleTableView.layer.cornerRadius = 16
+        scheduleTableView.separatorStyle = .none
+
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: view.topAnchor),
             view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -33,34 +49,15 @@ class ScheduleViewController: UIViewController {
             view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             header.topAnchor.constraint(equalTo: view.topAnchor, constant: 26),
             header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 30),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.heightAnchor.constraint(equalToConstant: 524),
+            scheduleTableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 30),
+            scheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scheduleTableView.heightAnchor.constraint(equalToConstant: 524),
             doneScheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             doneScheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             doneScheduleButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             doneScheduleButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-    }
-    
-    func scheduleTableView() -> UITableView {
-        let tableView = UITableView()
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return tableView
-    }
-    
-    func header() -> UILabel {
-        let header = UILabel()
-        view.addSubview(header)
-        header.translatesAutoresizingMaskIntoConstraints = false
-        header.text = "Расписание"
-        header.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        header.textColor = .ypBlackDay
-        
-        return header
     }
     
     func doneScheduleButton() -> UIButton {
@@ -73,7 +70,6 @@ class ScheduleViewController: UIViewController {
         doneScheduleButton.setTitle("Готово", for: .normal)
         doneScheduleButton.addTarget(self, action: #selector(doneScheduleButtonTapped), for: .touchUpInside)
         doneScheduleButton.translatesAutoresizingMaskIntoConstraints = false
-        
         return doneScheduleButton
     }
     

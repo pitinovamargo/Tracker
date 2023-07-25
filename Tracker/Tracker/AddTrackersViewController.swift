@@ -7,14 +7,24 @@
 
 import UIKit
 
-class AddTrackersViewController: UIViewController {
+final class AddTrackersViewController: UIViewController {
+    
+    let header: UILabel = {
+        let header = UILabel()
+        header.translatesAutoresizingMaskIntoConstraints = false
+        header.text = "Создание трекера"
+        header.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        header.textColor = .ypBlackDay
+        return header
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
         
-        let header = header()
+        view.addSubview(header)
+        
         let habitButton = habitButton()
         let irregularButton = irregularButton()
 
@@ -36,17 +46,6 @@ class AddTrackersViewController: UIViewController {
         ])
     }
     
-    func header() -> UILabel {
-        let header = UILabel()
-        view.addSubview(header)
-        header.translatesAutoresizingMaskIntoConstraints = false
-        header.text = "Создание трекера"
-        header.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        header.textColor = .ypBlackDay
-        
-        return header
-    }
-    
     func habitButton() -> UIButton {
         let habitButton = UIButton(type: .custom)
         view.addSubview(habitButton)
@@ -57,7 +56,6 @@ class AddTrackersViewController: UIViewController {
         habitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         habitButton.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
         habitButton.translatesAutoresizingMaskIntoConstraints = false
-        
         return habitButton
     }
     
@@ -71,13 +69,11 @@ class AddTrackersViewController: UIViewController {
         irregularButton.setTitle("Нерегулярное событие", for: .normal)
         irregularButton.addTarget(self, action: #selector(irregularButtonTapped), for: .touchUpInside)
         irregularButton.translatesAutoresizingMaskIntoConstraints = false
-        
         return irregularButton
     }
     
     @objc private func habitButtonTapped() {
-        
-        let addHabit = CreatingTrackerViewController()
+        let addHabit = CreateTrackerViewController()
         present(addHabit, animated: true, completion: nil)
     }
     
