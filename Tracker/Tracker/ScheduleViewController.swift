@@ -86,7 +86,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as! ScheduleViewCell
         
-        let dayOfWeek = WeekDay.allValues[indexPath.row]
+        let dayOfWeek = WeekDaySchedule.allValues[indexPath.row]
         cell.dayOfWeek.text = dayOfWeek.rawValue
         
         return cell
@@ -114,14 +114,14 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-enum WeekDay: String {
-    case понедельник = "Понедельник"
-    case вторник = "Вторник"
-    case среда = "Среда"
-    case четверг = "Четверг"
-    case пятница = "Пятница"
-    case суббота = "Суббота"
-    case воскресенье = "Воскресенье"
+enum WeekDaySchedule: String {
+    case monday = "Понедельник"
+    case tuesday = "Вторник"
+    case wednesday = "Среда"
+    case thursday = "Четверг"
+    case friday = "Пятница"
+    case saturday = "Суббота"
+    case sunday = "Воскресенье"
     
-    static let allValues = [понедельник, вторник, среда, четверг, пятница, суббота, воскресенье]
+    static let allValues = [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
 }

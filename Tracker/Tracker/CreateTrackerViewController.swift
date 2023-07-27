@@ -9,6 +9,7 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
+    var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "CreateTrackersTableViewCell"
     let clearButton = UIButton(type: .custom)
     let createButton: UIButton = UIButton(type: .custom)
@@ -51,7 +52,7 @@ final class CreateTrackerViewController: UIViewController {
         let cancelButton = cancelButton()
         configureCreateButton()
         setupClearButton()
-
+        
         addTrackerName.delegate = self
         trackersTableView.delegate = self
         trackersTableView.dataSource = self
@@ -124,12 +125,27 @@ final class CreateTrackerViewController: UIViewController {
     @objc func clearTextField() {
         addTrackerName.text = ""
         clearButton.isHidden = true
-       }
+    }
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
     @objc private func createButtonTapped() {
+        print("КНОПКА НАЖАЛАСЬ")
+        guard let text = addTrackerName.text, !text.isEmpty else {
+            return
+        }
+        
+        let newTracker = Tracker(title: text, color: .ypRed, emoji: "✅", schedule: [])
+        trackersViewController?.appendTracker(tracker: newTracker)
+        trackersViewController?.reload()
+        addTrackerName.text = ""
+        dismiss(animated: true)
     }
+}
+
+protocol TrackersActions {
+    func appendTracker(tracker: Tracker)
+    func reload()
 }
 
 

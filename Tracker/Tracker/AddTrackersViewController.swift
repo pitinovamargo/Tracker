@@ -9,6 +9,8 @@ import UIKit
 
 final class AddTrackersViewController: UIViewController {
     
+    var trackersViewController: TrackersViewController?
+    
     let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +76,7 @@ final class AddTrackersViewController: UIViewController {
     
     @objc private func habitButtonTapped() {
         let addHabit = CreateTrackerViewController()
+        addHabit.trackersViewController = self.trackersViewController
         present(addHabit, animated: true)
     }
     

@@ -1,5 +1,5 @@
 //
-//  TrackersCollectionCell.swift
+//  TrackerCollectionCell.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 10.07.2023.

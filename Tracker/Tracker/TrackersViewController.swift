@@ -1,5 +1,5 @@
 //
-//  TrackerViewController.swift
+//  TrackersViewController.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 07.07.2023.
@@ -9,8 +9,8 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    private var trackers: [Tracker] = []
-    private var categories: [TrackerCategory] = []
+    var trackers: [Tracker] = []
+    var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -66,9 +66,6 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let tracker = Tracker(name: "some", color: .ypColorSelection1, emoji: "😜", schedule: 8)
-        categories.append(TrackerCategory(header: "Утренняя рутина", trackers: [tracker]))
-        
         view.addSubview(header)
         view.addSubview(searchTreckers)
         view.addSubview(datePicker)
@@ -76,14 +73,16 @@ final class TrackersViewController: UIViewController {
         view.addSubview(emptyTrackersText)
         
         let addTrackerButton = addTrackerButton()
-
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         
         let collectionView = collectionView
         view.addSubview(collectionView)
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let category = TrackerCategory(header: "Домашние дела", trackers: trackers)
+        categories.append(category)
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -118,16 +117,27 @@ final class TrackersViewController: UIViewController {
         addTrackerButton.addTarget(self, action: #selector(didTapAddTracker), for: .touchUpInside)
         return addTrackerButton
     }
-
+    
     @objc private func didTapAddTracker() {
         let addTracker = AddTrackersViewController()
+        addTracker.trackersViewController = self
         present(addTracker, animated: true, completion: nil)
+    }
+}
+
+extension TrackersViewController: TrackersActions {
+    func appendTracker(tracker: Tracker) {
+        self.trackers.append(tracker)
+    }
+    
+    func reload() {
+        self.collectionView.reloadData()
     }
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -135,22 +145,34 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.prepareForReuse()
-        
         cell.setupCell(daysAmount: "5 дней")
-        cell.trackerDescription.text = "Поливать растения"
+        if !trackers.isEmpty && indexPath.row < trackers.count {
+            cell.trackerDescription.text = trackers[indexPath.row].title
+        } else {
+            cell.trackerDescription.text = ""
+        }
         cell.trackerEmoji.text = "😜"
         
         return cell
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return categories.count
     }
     
     func collectionView(_ collectionView:UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSectionView.id, for: indexPath) as? HeaderSectionView else {
             return UICollectionReusableView()
         }
+        
+        guard indexPath.section < categories.count else {
+            print("индекс секции превышает количество категорий")
+            return header
+        }
+        
+        let headerText = categories[indexPath.section].header
+        header.headerText = headerText
+        
         return header
     }
 }
@@ -175,11 +197,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 struct Tracker {
-    //    let id: UUID
-    let name: String
+    let id = UUID()
+    //    let date: Date
+    let title: String
     let color: UIColor
     let emoji: String
-    let schedule: Int
+    //    let dayCount: Int
+    let schedule: [WeekDay]?
 }
 
 struct TrackerCategory {
@@ -189,5 +213,15 @@ struct TrackerCategory {
 
 struct TrackerRecord {
     let id: UUID
-    let date: Int
+    let date: Date
+}
+
+enum WeekDay: Int {
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
 }
