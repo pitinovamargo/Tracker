@@ -130,7 +130,6 @@ final class CreateTrackerViewController: UIViewController {
         dismiss(animated: true)
     }
     @objc private func createButtonTapped() {
-        print("КНОПКА НАЖАЛАСЬ")
         guard let text = addTrackerName.text, !text.isEmpty else {
             return
         }
@@ -138,7 +137,7 @@ final class CreateTrackerViewController: UIViewController {
         let newTracker = Tracker(title: text, color: .ypRed, emoji: "✅", schedule: [])
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
-        addTrackerName.text = ""
+        trackersViewController?.checkTrackersArray()
         dismiss(animated: true)
     }
 }
@@ -146,6 +145,7 @@ final class CreateTrackerViewController: UIViewController {
 protocol TrackersActions {
     func appendTracker(tracker: Tracker)
     func reload()
+    func checkTrackersArray()
 }
 
 

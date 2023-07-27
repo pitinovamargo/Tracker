@@ -76,7 +76,7 @@ final class TrackersViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        
+        checkTrackersArray()
         let collectionView = collectionView
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,6 +132,16 @@ extension TrackersViewController: TrackersActions {
     
     func reload() {
         self.collectionView.reloadData()
+    }
+    
+    func checkTrackersArray() {
+        if trackers.isEmpty {
+            // Если массив пустой, скрываем коллекцию и отображаем экран-заглушку
+            collectionView.isHidden = true
+        } else {
+            // Если массив не пустой, отображаем коллекцию и скрываем экран-заглушку
+            collectionView.isHidden = false
+        }
     }
 }
 
