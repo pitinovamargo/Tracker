@@ -67,6 +67,22 @@ final class TrackersViewController: UIViewController {
         return emptyTrackersText
     }()
     
+    let emptySearch: UIImageView = {
+        let emptySearch = UIImageView()
+        emptySearch.translatesAutoresizingMaskIntoConstraints = false
+        emptySearch.image = UIImage(named: "empty search")
+        return emptySearch
+    }()
+    
+    let emptySearchText: UILabel = {
+        let emptySearchText = UILabel()
+        emptySearchText.translatesAutoresizingMaskIntoConstraints = false
+        emptySearchText.text = "Ничего не найдено"
+        emptySearchText.textColor = .ypBlackDay
+        emptySearchText.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        return emptySearchText
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -75,6 +91,8 @@ final class TrackersViewController: UIViewController {
         view.addSubview(datePicker)
         view.addSubview(emptyTrackersLogo)
         view.addSubview(emptyTrackersText)
+        view.addSubview(emptySearch)
+        view.addSubview(emptySearchText)
         
         let addTrackerButton = addTrackerButton()
         
@@ -87,7 +105,7 @@ final class TrackersViewController: UIViewController {
         let category = TrackerCategory(header: "Домашние дела", trackers: trackers)
         categories.append(category)
         
-        checkTrackersArray()
+        showFirstStubScreen()
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -101,6 +119,12 @@ final class TrackersViewController: UIViewController {
             emptyTrackersLogo.widthAnchor.constraint(equalToConstant: 80),
             emptyTrackersText.centerXAnchor.constraint(equalTo: emptyTrackersLogo.centerXAnchor),
             emptyTrackersText.topAnchor.constraint(equalTo: emptyTrackersLogo.bottomAnchor, constant: 8),
+            emptySearch.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptySearch.topAnchor.constraint(equalTo: searchTrackers.bottomAnchor, constant: 220),
+            emptySearch.heightAnchor.constraint(equalToConstant: 80),
+            emptySearch.widthAnchor.constraint(equalToConstant: 80),
+            emptySearchText.centerXAnchor.constraint(equalTo: emptySearch.centerXAnchor),
+            emptySearchText.topAnchor.constraint(equalTo: emptySearch.bottomAnchor, constant: 8),
             collectionView.topAnchor.constraint(equalTo: searchTrackers.bottomAnchor, constant: 24),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -143,7 +167,7 @@ final class TrackersViewController: UIViewController {
         .filter { category in
             !category.trackers.isEmpty
         }
-        checkTrackersArray()
+        showSecondStubScreen()
         collectionView.reloadData()
     }
 }
@@ -160,11 +184,30 @@ extension TrackersViewController: TrackersActions {
     func reload() {
         self.collectionView.reloadData()
     }
-    func checkTrackersArray() {
+    func showFirstStubScreen() {
         if visibleCategories.isEmpty {
             collectionView.isHidden = true
+            emptySearch.isHidden = true
+            emptySearchText.isHidden = true
         } else {
             collectionView.isHidden = false
+            emptySearch.isHidden = false
+            emptySearchText.isHidden = false
+        }
+    }
+    func showSecondStubScreen() {
+        if visibleCategories.isEmpty {
+            collectionView.isHidden = true
+            emptyTrackersLogo.isHidden = true
+            emptyTrackersText.isHidden = true
+            emptySearch.isHidden = false
+            emptySearchText.isHidden = false
+        } else {
+            collectionView.isHidden = false
+            emptyTrackersLogo.isHidden = false
+            emptyTrackersText.isHidden = false
+            emptySearch.isHidden = true
+            emptySearchText.isHidden = true
         }
     }
 }

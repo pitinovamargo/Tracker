@@ -140,7 +140,7 @@ final class CreateTrackerViewController: UIViewController {
         print(newTracker)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
-        trackersViewController?.checkTrackersArray()
+        trackersViewController?.showFirstStubScreen()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
@@ -148,7 +148,7 @@ final class CreateTrackerViewController: UIViewController {
 protocol TrackersActions {
     func appendTracker(tracker: Tracker)
     func reload()
-    func checkTrackersArray()
+    func showFirstStubScreen()
 }
 
 extension CreateTrackerViewController: SelectedDays {
