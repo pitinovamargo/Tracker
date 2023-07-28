@@ -9,8 +9,10 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
-    var trackersViewController: TrackersActions?
+    var trackersViewController: TrackersActions?    
     let cellReuseIdentifier = "CreateTrackersTableViewCell"
+    var selectedDays: [WeekDay] = []
+    
     let clearButton = UIButton(type: .custom)
     let createButton: UIButton = UIButton(type: .custom)
     let header: UILabel = {
@@ -134,11 +136,12 @@ final class CreateTrackerViewController: UIViewController {
             return
         }
         
-        let newTracker = Tracker(title: text, color: .ypRed, emoji: "✅", schedule: [])
+        let newTracker = Tracker(title: text, color: .ypRed, emoji: "✅", schedule: self.selectedDays)
+        print(newTracker)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
         trackersViewController?.checkTrackersArray()
-        dismiss(animated: true)
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -148,6 +151,16 @@ protocol TrackersActions {
     func checkTrackersArray()
 }
 
+extension CreateTrackerViewController: SelectedDays {
+    func save(indicies: [Int]) {
+        for index in indicies {
+            guard let day = WeekDay(rawValue: index) else {
+                return
+            }
+            self.selectedDays.append(day)
+        }
+    }
+}
 
 extension CreateTrackerViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -167,7 +180,10 @@ extension CreateTrackerViewController: UITableViewDelegate, UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1 {
-            present(ScheduleViewController(), animated: true, completion: nil)
+            let scheduleViewController = ScheduleViewController()
+            scheduleViewController.createTrackerViewController = self
+//            scheduleViewController.selectedDays = self.selectedDays
+            present(scheduleViewController, animated: true, completion: nil)
         }
         trackersTableView.deselectRow(at: indexPath, animated: true)
     }

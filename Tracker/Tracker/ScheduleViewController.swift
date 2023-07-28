@@ -10,6 +10,7 @@ import UIKit
 class ScheduleViewController: UIViewController {
     
     let scheduleCellReuseIdentifier = "ScheduleTableViewCell"
+    var createTrackerViewController: SelectedDays?
     
     let header: UILabel = {
         let header = UILabel()
@@ -74,8 +75,22 @@ class ScheduleViewController: UIViewController {
     }
     
     @objc private func doneScheduleButtonTapped() {
-        
+        var selected: [Int] = []
+        for (index, elem) in scheduleTableView.visibleCells.enumerated() {
+            guard let cell = elem as? ScheduleViewCell else {
+                return
+            }
+            if cell.selectedDay {
+                selected.append(index)
+            }
+        }
+        self.createTrackerViewController?.save(indicies: selected)
+        dismiss(animated: true)
     }
+}
+
+protocol SelectedDays {
+    func save(indicies: [Int])
 }
 
 extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
@@ -86,8 +101,8 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as! ScheduleViewCell
         
-        let dayOfWeek = WeekDaySchedule.allValues[indexPath.row]
-        cell.dayOfWeek.text = dayOfWeek.rawValue
+        let dayOfWeek = WeekDay(rawValue: indexPath.row)
+        cell.dayOfWeek.text = dayOfWeek?.name
         
         return cell
     }
@@ -114,14 +129,31 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-enum WeekDaySchedule: String {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
+enum WeekDay: Int {
+    case monday = 0
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
     
-    static let allValues = [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+    var name: String {
+        switch self {
+        case .monday:
+            return "Понедельник"
+        case .tuesday:
+            return "Вторник"
+        case .wednesday:
+            return "Среда"
+        case .thursday:
+            return "Четверг"
+        case .friday:
+            return "Пятница"
+        case .saturday:
+            return "Суббота"
+        case .sunday:
+            return "Воскресенье"
+        }
+    }
 }
