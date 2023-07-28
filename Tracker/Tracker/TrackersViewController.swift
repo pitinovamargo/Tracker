@@ -81,13 +81,13 @@ final class TrackersViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         
-        checkTrackersArray()
-        
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         let category = TrackerCategory(header: "Домашние дела", trackers: trackers)
         categories.append(category)
+        
+        checkTrackersArray()
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -140,6 +140,10 @@ final class TrackersViewController: UIViewController {
             }
             )
         }
+        .filter { category in
+            !category.trackers.isEmpty
+        }
+        checkTrackersArray()
         collectionView.reloadData()
     }
 }
@@ -157,7 +161,7 @@ extension TrackersViewController: TrackersActions {
         self.collectionView.reloadData()
     }
     func checkTrackersArray() {
-        if trackers.isEmpty {
+        if visibleCategories.isEmpty {
             collectionView.isHidden = true
         } else {
             collectionView.isHidden = false
