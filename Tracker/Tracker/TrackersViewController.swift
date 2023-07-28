@@ -45,6 +45,8 @@ final class TrackersViewController: UIViewController {
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_Ru")
+        datePicker.calendar.firstWeekday = 2
         datePicker.addTarget(self, action: #selector(pickerChanged), for: .valueChanged)
         return datePicker
     }()
@@ -81,7 +83,6 @@ final class TrackersViewController: UIViewController {
         
         checkTrackersArray()
         
-        let collectionView = collectionView
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -133,9 +134,9 @@ final class TrackersViewController: UIViewController {
         
         visibleCategories = categories.map { category in
             TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
-                tracker.schedule?.contains { weekDay in
-                    weekDay.numberValue == filterWeekday
-                } == true
+                tracker.schedule?.contains { day in
+                    return day.rawValue == (filterWeekday - 2)
+                } ?? false
             }
             )
         }
@@ -146,6 +147,11 @@ final class TrackersViewController: UIViewController {
 extension TrackersViewController: TrackersActions {
     func appendTracker(tracker: Tracker) {
         self.trackers.append(tracker)
+        self.categories = self.categories.map { category in
+            var updatedTrackers = category.trackers
+            updatedTrackers.append(tracker)
+            return TrackerCategory(header: category.header, trackers: updatedTrackers)
+        }
     }
     func reload() {
         self.collectionView.reloadData()
@@ -161,7 +167,7 @@ extension TrackersViewController: TrackersActions {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trackers.count
+        return visibleCategories[section].trackers.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCollectionCell else {
@@ -178,17 +184,17 @@ extension TrackersViewController: UICollectionViewDataSource {
         return cell
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categories.count
+        return visibleCategories.count
     }
     func collectionView(_ collectionView:UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSectionView.id, for: indexPath) as? HeaderSectionView else {
             return UICollectionReusableView()
         }
-        guard indexPath.section < categories.count else {
+        guard indexPath.section < visibleCategories.count else {
             print("индекс секции превышает количество категорий")
             return header
         }
-        let headerText = categories[indexPath.section].header
+        let headerText = visibleCategories[indexPath.section].header
         header.headerText = headerText
         return header
     }
