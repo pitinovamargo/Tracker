@@ -14,6 +14,9 @@ final class TrackersViewController: UIViewController {
     var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
+    var selectedDate: Int?
+    var filterText: String?
+    
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
@@ -136,6 +139,7 @@ final class TrackersViewController: UIViewController {
         collectionView.register(TrackerCollectionCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(HeaderSectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSectionView.id)
         collectionView.allowsMultipleSelection = false
+        searchTrackers.delegate = self
     }
     
     func addTrackerButton() -> UIButton {
@@ -155,20 +159,39 @@ final class TrackersViewController: UIViewController {
     @objc private func pickerChanged() {
         let calendar = Calendar.current
         let filterWeekday = calendar.component(.weekday, from: datePicker.date)
-        
+        self.selectedDate = filterWeekday - 2
+        filterTrackers()
+    }
+    
+    private func filterTrackers() {
         visibleCategories = categories.map { category in
             TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
-                tracker.schedule?.contains { day in
-                    return day.rawValue == (filterWeekday - 2)
+                let scheduleContains = tracker.schedule?.contains { day in
+                    guard let currentDay = self.selectedDate else {
+                        return true
+                    }
+                    return day.rawValue == currentDay
                 } ?? false
-            }
-            )
+                let titleContains = tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
+                return scheduleContains && titleContains
+            })
         }
         .filter { category in
             !category.trackers.isEmpty
         }
         showSecondStubScreen()
         collectionView.reloadData()
+    }
+}
+
+extension TrackersViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.filterText = textField.text
+        filterTrackers()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return true
     }
 }
 
@@ -180,6 +203,7 @@ extension TrackersViewController: TrackersActions {
             updatedTrackers.append(tracker)
             return TrackerCategory(header: category.header, trackers: updatedTrackers)
         }
+        filterTrackers()
     }
     func reload() {
         self.collectionView.reloadData()
@@ -222,11 +246,8 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         cell.prepareForReuse()
         cell.setupCell(daysAmount: "5 дней")
-        if !trackers.isEmpty && indexPath.row < trackers.count {
-            cell.trackerDescription.text = trackers[indexPath.row].title
-        } else {
-            cell.trackerDescription.text = ""
-        }
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        cell.trackerDescription.text = tracker.title
         cell.trackerEmoji.text = "😜"
         return cell
     }
