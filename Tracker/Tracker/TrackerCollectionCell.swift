@@ -10,13 +10,6 @@ import UIKit
 final class TrackerCollectionCell: UICollectionViewCell {
     
     static var reuseId = "cell"
-    
-    var trackersDaysAmount: UILabel = UILabel()
-    var trackerDescription: UILabel = UILabel()
-    var completedTrackerButton: UIButton = UIButton(type: .custom)
-    var trackerCard: UIView = UIView()
-    var emojiBackground: UIView = UIView()
-    var trackerEmoji: UILabel = UILabel()
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -26,13 +19,69 @@ final class TrackerCollectionCell: UICollectionViewCell {
         .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
     ]
     
+    lazy var trackersDaysAmount: UILabel = {
+        let trackersDaysAmount = UILabel()
+        contentView.addSubview(trackersDaysAmount)
+        trackersDaysAmount.frame = CGRect(x: 120, y: 106, width: 101, height: 18)
+        trackersDaysAmount.translatesAutoresizingMaskIntoConstraints = false
+        trackersDaysAmount.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        trackersDaysAmount.textColor = .ypBlackDay
+        return trackersDaysAmount
+    }()
+    lazy var trackerDescription: UILabel = {
+        let trackerDescription = UILabel()
+        contentView.addSubview(trackerDescription)
+        trackerDescription.frame = CGRect(x: 120, y: 106, width: 143, height: 34)
+        trackerDescription.translatesAutoresizingMaskIntoConstraints = false
+        trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        trackerDescription.textColor = .ypWhiteDay
+        trackerDescription.numberOfLines = 0
+        trackerDescription.lineBreakMode = .byWordWrapping
+        trackerDescription.preferredMaxLayoutWidth = 143
+        return trackerDescription
+    }()
+    lazy var trackerCard: UIView = {
+        let trackerCard = UIView()
+        contentView.addSubview(trackerCard)
+        trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width * 0.55)
+        trackerCard.backgroundColor = colors[Int.random(in: 0..<self.colors.count)]
+        trackerCard.layer.cornerRadius = 16
+        return trackerCard
+    }()
+    lazy var completedTrackerButton: UIButton = {
+        let completedTrackerButton = UIButton(type: .custom)
+        contentView.addSubview(completedTrackerButton)
+        completedTrackerButton.frame = CGRect(x: 100, y: 100, width: 34, height: 34)
+        completedTrackerButton.translatesAutoresizingMaskIntoConstraints = false
+        completedTrackerButton.setImage(UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
+        completedTrackerButton.addTarget(self, action: #selector(completedTracker), for: .touchUpInside)
+        return completedTrackerButton
+    }()
+
+    lazy var emojiBackground: UIView = {
+        let emojiBackground = UIView()
+        contentView.addSubview(emojiBackground)
+        emojiBackground.frame = CGRect(x: 12, y: 12, width: 24, height: 24)
+        emojiBackground.backgroundColor = .ypWhiteDay
+        emojiBackground.layer.cornerRadius = emojiBackground.frame.width / 2
+        emojiBackground.layer.opacity = 0.3
+        return emojiBackground
+    }()
+    lazy var trackerEmoji: UILabel = {
+        let trackerEmoji = UILabel()
+        contentView.addSubview(trackerEmoji)
+        trackerEmoji.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
+        trackerEmoji.translatesAutoresizingMaskIntoConstraints = false
+        trackerEmoji.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return trackerEmoji
+    }()
+
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
-        
-        configureLables()
         
         NSLayoutConstraint.activate([
             trackersDaysAmount.topAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: 16),
@@ -50,45 +99,10 @@ final class TrackerCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureLables() {
-        contentView.addSubview(trackersDaysAmount)
-        trackersDaysAmount.frame = CGRect(x: 120, y: 106, width: 101, height: 18)
-        trackersDaysAmount.translatesAutoresizingMaskIntoConstraints = false
-        trackersDaysAmount.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        trackersDaysAmount.textColor = .ypBlackDay
-        
-        contentView.addSubview(trackerCard)
-        trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width * 0.55)
-        trackerCard.backgroundColor = colors[Int.random(in: 0..<colors.count)]
-        trackerCard.layer.cornerRadius = 16
-        
-        contentView.addSubview(trackerDescription)
-        trackerDescription.frame = CGRect(x: 120, y: 106, width: 143, height: 34)
-        trackerDescription.translatesAutoresizingMaskIntoConstraints = false
-        trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        trackerDescription.textColor = .ypWhiteDay
-        trackerDescription.numberOfLines = 0
-        trackerDescription.lineBreakMode = .byWordWrapping
-        trackerDescription.preferredMaxLayoutWidth = 143
-        
-        contentView.addSubview(completedTrackerButton)
-        completedTrackerButton.frame = CGRect(x: 100, y: 100, width: 34, height: 34)
-        completedTrackerButton.translatesAutoresizingMaskIntoConstraints = false
-        completedTrackerButton.setImage(UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
-        
-        contentView.addSubview(emojiBackground)
-        emojiBackground.frame = CGRect(x: 12, y: 12, width: 24, height: 24)
-        emojiBackground.backgroundColor = .ypWhiteDay
-        emojiBackground.layer.cornerRadius = emojiBackground.frame.width / 2
-        emojiBackground.layer.opacity = 0.3
-        
-        contentView.addSubview(trackerEmoji)
-        trackerEmoji.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
-        trackerEmoji.translatesAutoresizingMaskIntoConstraints = false
-        trackerEmoji.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-}
-    
     func setupCell(daysAmount: String) {
         trackersDaysAmount.text = daysAmount
+    }
+    @objc func completedTracker() {
+        completedTrackerButton.setImage(UIImage(named: "Minus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
     }
 }
