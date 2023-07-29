@@ -99,10 +99,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupCell(daysAmount: String) {
-        trackersDaysAmount.text = daysAmount
-    }
     @objc func completedTracker() {
-        completedTrackerButton.setImage(UIImage(named: "Minus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
+        completedTrackerButton.setImage(UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
     }
 }

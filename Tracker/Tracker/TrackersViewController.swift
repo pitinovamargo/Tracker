@@ -245,10 +245,12 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.prepareForReuse()
-        cell.setupCell(daysAmount: "5 дней")
+        
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         cell.trackerDescription.text = tracker.title
         cell.trackerEmoji.text = "😜"
+        cell.trackersDaysAmount.text = "\(tracker.dayCount) дней"
+
         return cell
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -259,7 +261,6 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionReusableView()
         }
         guard indexPath.section < visibleCategories.count else {
-            print("индекс секции превышает количество категорий")
             return header
         }
         let headerText = visibleCategories[indexPath.section].header
@@ -289,7 +290,7 @@ struct Tracker {
     let title: String
     let color: UIColor
     let emoji: String
-    //    let dayCount: Int
+    let dayCount: Int
     let schedule: [WeekDay]?
 }
 
