@@ -106,12 +106,29 @@ final class TrackerCell: UICollectionViewCell {
         self.trackerCard.backgroundColor = tracker.color
         trackerDescription.text = tracker.title
         trackerEmoji.text = "😜"
-        trackersDaysAmount.text = "\(completedDays) дней"
+        trackersDaysAmount.text = formatCompletedDays(completedDays)
         
         let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
         completedTrackerButton.setImage(image, for: .normal)
     }
     
+    func formatCompletedDays(_ completedDays: Int) -> String {
+        let lastDigit = completedDays % 10
+        let lastTwoDigits = completedDays % 100
+        if lastTwoDigits >= 11 && lastTwoDigits <= 19 {
+            return "\(completedDays) дней"
+        }
+
+        switch lastDigit {
+        case 1:
+            return "\(completedDays) день"
+        case 2, 3, 4:
+            return "\(completedDays) дня"
+        default:
+            return "\(completedDays) дней"
+        }
+    }
+
     @objc func completedTracker() {
         guard let trackerId = trackerId, let indexPath = indexPath else {
             assertionFailure("no trackerId")
@@ -122,6 +139,5 @@ final class TrackerCell: UICollectionViewCell {
         } else {
             delegate?.completeTracker(id: trackerId, at: indexPath)
         }
-        
     }
 }

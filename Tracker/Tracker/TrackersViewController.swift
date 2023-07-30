@@ -293,6 +293,7 @@ extension TrackersViewController: TrackerCellDelegate {
     func uncompleteTracker(id: UUID, at indexPath: IndexPath) {
         completedTrackers.removeAll { trackerRecord in
             isSameTrackerrecord(trackerRecord: trackerRecord, id: id)
+
         }
         collectionView.reloadItems(at: [indexPath])
     }
