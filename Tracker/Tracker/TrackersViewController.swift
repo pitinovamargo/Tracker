@@ -136,7 +136,7 @@ final class TrackersViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(TrackerCollectionCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(HeaderSectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSectionView.id)
         collectionView.allowsMultipleSelection = false
         searchTrackers.delegate = self
@@ -241,18 +241,23 @@ extension TrackersViewController: UICollectionViewDataSource {
         return visibleCategories[section].trackers.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCollectionCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
         cell.prepareForReuse()
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
-        cell.trackerDescription.text = tracker.title
-        cell.trackerEmoji.text = "😜"
-        cell.trackersDaysAmount.text = "\(tracker.dayCount) дней"
+        cell.delegate = self
+        
+        let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
+        let completedDays = completedTrackers.filter {
+            $0.id == tracker.id
+        }.count
+        cell.configure(tracker: tracker, isCompletedToday: isCompletedToday, completedDays: completedDays, indexPath: indexPath)
 
         return cell
     }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return visibleCategories.count
     }
@@ -266,6 +271,30 @@ extension TrackersViewController: UICollectionViewDataSource {
         let headerText = visibleCategories[indexPath.section].header
         header.headerText = headerText
         return header
+    }
+    private func isTrackerCompletedToday(id: UUID) -> Bool {
+        completedTrackers.contains { trackerRecord in
+            isSameTrackerrecord(trackerRecord: trackerRecord, id: id)
+        }
+    }
+    private func isSameTrackerrecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {
+        let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+        return trackerRecord.id == id && isSameDay
+    }
+}
+
+extension TrackersViewController: TrackerCellDelegate {
+    func completeTracker(id: UUID, at indexPath: IndexPath) {
+        let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
+        completedTrackers.append(trackerRecord)
+        collectionView.reloadItems(at: [indexPath])
+    }
+    
+    func uncompleteTracker(id: UUID, at indexPath: IndexPath) {
+        completedTrackers.removeAll { trackerRecord in
+            isSameTrackerrecord(trackerRecord: trackerRecord, id: id)
+        }
+        collectionView.reloadItems(at: [indexPath])
     }
 }
 
@@ -286,7 +315,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 struct Tracker {
     let id = UUID()
-    //    let date: Date
     let title: String
     let color: UIColor
     let emoji: String

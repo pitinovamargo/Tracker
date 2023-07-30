@@ -7,17 +7,15 @@
 
 import UIKit
 
-final class TrackerCollectionCell: UICollectionViewCell {
+protocol TrackerCellDelegate: AnyObject {
+    func completeTracker(id: UUID, at indexPath: IndexPath)
+    func uncompleteTracker(id: UUID, at indexPath: IndexPath)
+}
+
+final class TrackerCell: UICollectionViewCell {
     
     static var reuseId = "cell"
-    private let colors: [UIColor] = [
-        .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
-        .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
-        .ypColorSelection7, .ypColorSelection8, .ypColorSelection9,
-        .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
-        .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
-        .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
-    ]
+
     
     lazy var trackersDaysAmount: UILabel = {
         let trackersDaysAmount = UILabel()
@@ -44,7 +42,6 @@ final class TrackerCollectionCell: UICollectionViewCell {
         let trackerCard = UIView()
         contentView.addSubview(trackerCard)
         trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width * 0.55)
-        trackerCard.backgroundColor = colors[Int.random(in: 0..<self.colors.count)]
         trackerCard.layer.cornerRadius = 16
         return trackerCard
     }()
@@ -53,7 +50,6 @@ final class TrackerCollectionCell: UICollectionViewCell {
         contentView.addSubview(completedTrackerButton)
         completedTrackerButton.frame = CGRect(x: 100, y: 100, width: 34, height: 34)
         completedTrackerButton.translatesAutoresizingMaskIntoConstraints = false
-        completedTrackerButton.setImage(UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
         completedTrackerButton.addTarget(self, action: #selector(completedTracker), for: .touchUpInside)
         return completedTrackerButton
     }()
@@ -76,6 +72,10 @@ final class TrackerCollectionCell: UICollectionViewCell {
         return trackerEmoji
     }()
 
+    weak var delegate: TrackerCellDelegate?
+    private var isCompletedToday: Bool = false
+    private var trackerId: UUID?
+    private var indexPath: IndexPath?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,7 +99,29 @@ final class TrackerCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath) {
+        self.isCompletedToday = isCompletedToday
+        self.indexPath = indexPath
+        self.trackerId = tracker.id
+        self.trackerCard.backgroundColor = tracker.color
+        trackerDescription.text = tracker.title
+        trackerEmoji.text = "😜"
+        trackersDaysAmount.text = "\(completedDays) дней"
+        
+        let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
+        completedTrackerButton.setImage(image, for: .normal)
+    }
+    
     @objc func completedTracker() {
-        completedTrackerButton.setImage(UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay), for: .normal)
+        guard let trackerId = trackerId, let indexPath = indexPath else {
+            assertionFailure("no trackerId")
+            return
+        }
+        if isCompletedToday {
+            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
+        } else {
+            delegate?.completeTracker(id: trackerId, at: indexPath)
+        }
+        
     }
 }

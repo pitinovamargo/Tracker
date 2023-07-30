@@ -9,6 +9,15 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     
+    private let colors: [UIColor] = [
+        .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
+        .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
+        .ypColorSelection7, .ypColorSelection8, .ypColorSelection9,
+        .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
+        .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
+        .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
+    ]
+    
     var trackersViewController: TrackersActions?    
     let cellReuseIdentifier = "CreateTrackersTableViewCell"
     var selectedDays: [WeekDay] = []
@@ -136,8 +145,7 @@ final class CreateTrackerViewController: UIViewController {
             return
         }
         
-        let newTracker = Tracker(title: text, color: .ypRed, emoji: "✅", dayCount: 4, schedule: self.selectedDays)
-        print(newTracker)
+        let newTracker = Tracker(title: text, color: colors[Int.random(in: 0..<self.colors.count)], emoji: "✅", dayCount: 4, schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
         trackersViewController?.showFirstStubScreen()
