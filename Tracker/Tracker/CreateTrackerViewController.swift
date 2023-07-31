@@ -162,7 +162,6 @@ final class CreateTrackerViewController: UIViewController {
         let newTracker = Tracker(title: text, color: colors[Int.random(in: 0..<self.colors.count)], emoji: "😜", schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
-        trackersViewController?.showFirstStubScreen()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }

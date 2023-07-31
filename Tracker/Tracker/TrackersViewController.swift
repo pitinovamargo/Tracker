@@ -88,6 +88,7 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        selectCurrentDay()
         view.backgroundColor = .white
         addSubviews()
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
@@ -142,16 +143,20 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTracker() {
-        let addTracker = AddTrackersViewController()
+        let addTracker = AddTrackerViewController()
         addTracker.trackersViewController = self
         present(addTracker, animated: true, completion: nil)
     }
     
     @objc private func pickerChanged() {
+        selectCurrentDay()
+        filterTrackers()
+    }
+    
+    private func selectCurrentDay() {
         let calendar = Calendar.current
         let filterWeekday = calendar.component(.weekday, from: datePicker.date)
         self.selectedDate = filterWeekday - 2
-        filterTrackers()
     }
     
     private func filterTrackers() {

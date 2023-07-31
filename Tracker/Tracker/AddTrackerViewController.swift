@@ -1,5 +1,5 @@
 //
-//  AddTrackersViewController.swift
+//  AddTrackerViewController.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 21.07.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddTrackersViewController: UIViewController {
+final class AddTrackerViewController: UIViewController {
     
     var trackersViewController: TrackersViewController?
     
