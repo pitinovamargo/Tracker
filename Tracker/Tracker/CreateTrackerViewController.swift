@@ -7,8 +7,20 @@
 
 import UIKit
 
+protocol TrackersActions {
+    func appendTracker(tracker: Tracker)
+    func reload()
+    func showFirstStubScreen()
+}
+
 final class CreateTrackerViewController: UIViewController {
     
+    var trackersViewController: TrackersActions?
+    let cellReuseIdentifier = "CreateTrackersTableViewCell"
+    
+    private var selectedDays: [WeekDay] = []
+    private let clearButton = UIButton(type: .custom)
+    private let createButton: UIButton = UIButton(type: .custom)
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -18,13 +30,7 @@ final class CreateTrackerViewController: UIViewController {
         .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
     ]
     
-    var trackersViewController: TrackersActions?    
-    let cellReuseIdentifier = "CreateTrackersTableViewCell"
-    var selectedDays: [WeekDay] = []
-    
-    let clearButton = UIButton(type: .custom)
-    let createButton: UIButton = UIButton(type: .custom)
-    let header: UILabel = {
+    private let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
         header.text = "Новая привычка"
@@ -32,7 +38,8 @@ final class CreateTrackerViewController: UIViewController {
         header.textColor = .ypBlackDay
         return header
     }()
-    let addTrackerName: UITextField = {
+    
+    private let addTrackerName: UITextField = {
         let addTrackerName = UITextField()
         addTrackerName.translatesAutoresizingMaskIntoConstraints = false
         addTrackerName.placeholder = "Введите название трекера"
@@ -46,7 +53,21 @@ final class CreateTrackerViewController: UIViewController {
         addTrackerName.becomeFirstResponder()
         return addTrackerName
     }()
-    let trackersTableView: UITableView = {
+    
+    private lazy var cancelButton: UIButton = {
+        let cancelButton = UIButton(type: .custom)
+        cancelButton.setTitleColor(.ypRed, for: .normal)
+        cancelButton.layer.borderWidth = 1.0
+        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        return cancelButton
+    }()
+    
+    private let trackersTableView: UITableView = {
         let trackersTableView = UITableView()
         trackersTableView.translatesAutoresizingMaskIntoConstraints = false
         return trackersTableView
@@ -56,11 +77,7 @@ final class CreateTrackerViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
-        view.addSubview(header)
-        view.addSubview(addTrackerName)
-        view.addSubview(trackersTableView)
-        
-        let cancelButton = cancelButton()
+        addSubviews()
         configureCreateButton()
         setupClearButton()
         
@@ -98,7 +115,14 @@ final class CreateTrackerViewController: UIViewController {
         ])
     }
     
-    func setupClearButton() {
+    private func addSubviews() {
+        view.addSubview(header)
+        view.addSubview(addTrackerName)
+        view.addSubview(trackersTableView)
+        view.addSubview(cancelButton)
+    }
+    
+    private func setupClearButton() {
         clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
         clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
         clearButton.contentMode = .scaleAspectFit
@@ -109,20 +133,8 @@ final class CreateTrackerViewController: UIViewController {
         addTrackerName.rightView = paddingView
         addTrackerName.rightViewMode = .whileEditing
     }
-    func cancelButton() -> UIButton {
-        let cancelButton = UIButton(type: .custom)
-        view.addSubview(cancelButton)
-        cancelButton.setTitleColor(.ypRed, for: .normal)
-        cancelButton.layer.borderWidth = 1.0
-        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
-        cancelButton.layer.cornerRadius = 16
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        return cancelButton
-    }
-    func configureCreateButton() {
+    
+    private func configureCreateButton() {
         view.addSubview(createButton)
         createButton.setTitleColor(.ypWhiteDay, for: .normal)
         createButton.backgroundColor = .ypGray
@@ -133,18 +145,20 @@ final class CreateTrackerViewController: UIViewController {
         createButton.translatesAutoresizingMaskIntoConstraints = false
         createButton.isEnabled = false
     }
-    @objc func clearTextField() {
+    
+    @objc private func clearTextField() {
         addTrackerName.text = ""
         clearButton.isHidden = true
     }
+    
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
+    
     @objc private func createButtonTapped() {
         guard let text = addTrackerName.text, !text.isEmpty else {
             return
         }
-        
         let newTracker = Tracker(title: text, color: colors[Int.random(in: 0..<self.colors.count)], emoji: "😜", schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
@@ -153,12 +167,7 @@ final class CreateTrackerViewController: UIViewController {
     }
 }
 
-protocol TrackersActions {
-    func appendTracker(tracker: Tracker)
-    func reload()
-    func showFirstStubScreen()
-}
-
+// MARK: - SelectedDays
 extension CreateTrackerViewController: SelectedDays {
     func save(indicies: [Int]) {
         for index in indicies {
@@ -170,31 +179,21 @@ extension CreateTrackerViewController: SelectedDays {
     }
 }
 
-extension CreateTrackerViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! CreateTrackerViewCell
-        if indexPath.row == 0 {
-            cell.titleLabel.text = "Категория"
-        } else if indexPath.row == 1 {
-            cell.titleLabel.text = "Расписание"
-        }
-        return cell
-    }
+// MARK: - UITableViewDelegate
+extension CreateTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.createTrackerViewController = self
-//            scheduleViewController.selectedDays = self.selectedDays
             present(scheduleViewController, animated: true, completion: nil)
         }
         trackersTableView.deselectRow(at: indexPath, animated: true)
     }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let separatorInset: CGFloat = 16
         let separatorWidth = tableView.bounds.width - separatorInset * 2
@@ -207,6 +206,24 @@ extension CreateTrackerViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
+// MARK: - UITableViewDataSource
+extension CreateTrackerViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! CreateTrackerViewCell
+        if indexPath.row == 0 {
+            cell.titleLabel.text = "Категория"
+        } else if indexPath.row == 1 {
+            cell.titleLabel.text = "Расписание"
+        }
+        return cell
+    }
+}
+
+// MARK: - UITextFieldDelegate
 extension CreateTrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
@@ -218,6 +235,7 @@ extension CreateTrackerViewController: UITextFieldDelegate {
             createButton.backgroundColor = .ypBlackDay
         }
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
