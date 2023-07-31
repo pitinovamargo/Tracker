@@ -7,12 +7,16 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController {
+protocol SelectedDays {
+    func save(indicies: [Int])
+}
+
+final class ScheduleViewController: UIViewController {
     
     let scheduleCellReuseIdentifier = "ScheduleTableViewCell"
     var createTrackerViewController: SelectedDays?
     
-    let header: UILabel = {
+    private let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
         header.text = "Расписание"
@@ -21,28 +25,36 @@ class ScheduleViewController: UIViewController {
         return header
     }()
     
-    let scheduleTableView: UITableView = {
+    private let scheduleTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    
+    private lazy var doneScheduleButton: UIButton = {
+        let doneScheduleButton = UIButton(type: .custom)
+        doneScheduleButton.setTitleColor(.ypWhiteDay, for: .normal)
+        doneScheduleButton.backgroundColor = .ypBlackDay
+        doneScheduleButton.layer.cornerRadius = 16
+        doneScheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        doneScheduleButton.setTitle("Готово", for: .normal)
+        doneScheduleButton.addTarget(self, action: #selector(doneScheduleButtonTapped), for: .touchUpInside)
+        doneScheduleButton.translatesAutoresizingMaskIntoConstraints = false
+        return doneScheduleButton
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
+        addSubviews()
         
-        view.addSubview(header)
-        view.addSubview(scheduleTableView)
-        
-        let doneScheduleButton = doneScheduleButton()
-
         scheduleTableView.delegate = self
         scheduleTableView.dataSource = self
         scheduleTableView.register(ScheduleViewCell.self, forCellReuseIdentifier: scheduleCellReuseIdentifier)
         scheduleTableView.layer.cornerRadius = 16
         scheduleTableView.separatorStyle = .none
-
+        
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: view.topAnchor),
             view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -61,17 +73,10 @@ class ScheduleViewController: UIViewController {
         ])
     }
     
-    func doneScheduleButton() -> UIButton {
-        let doneScheduleButton = UIButton(type: .custom)
+    private func addSubviews() {
+        view.addSubview(header)
+        view.addSubview(scheduleTableView)
         view.addSubview(doneScheduleButton)
-        doneScheduleButton.setTitleColor(.ypWhiteDay, for: .normal)
-        doneScheduleButton.backgroundColor = .ypBlackDay
-        doneScheduleButton.layer.cornerRadius = 16
-        doneScheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        doneScheduleButton.setTitle("Готово", for: .normal)
-        doneScheduleButton.addTarget(self, action: #selector(doneScheduleButtonTapped), for: .touchUpInside)
-        doneScheduleButton.translatesAutoresizingMaskIntoConstraints = false
-        return doneScheduleButton
     }
     
     @objc private func doneScheduleButtonTapped() {
@@ -89,24 +94,8 @@ class ScheduleViewController: UIViewController {
     }
 }
 
-protocol SelectedDays {
-    func save(indicies: [Int])
-}
-
-extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as! ScheduleViewCell
-        
-        let dayOfWeek = WeekDay(rawValue: indexPath.row)
-        cell.dayOfWeek.text = dayOfWeek?.name
-        
-        return cell
-    }
-    
+// MARK: - UITableViewDelegate
+extension ScheduleViewController: UITableViewDelegate {    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
@@ -126,6 +115,22 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         scheduleTableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+// MARK: - UITableViewDataSource
+extension ScheduleViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 7
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as! ScheduleViewCell
+        
+        let dayOfWeek = WeekDay(rawValue: indexPath.row)
+        cell.dayOfWeek.text = dayOfWeek?.name
+        
+        return cell
     }
 }
 

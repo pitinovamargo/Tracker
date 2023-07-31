@@ -18,6 +18,13 @@ final class ScheduleViewCell: UITableViewCell {
         return dayOfWeek
     }()
     
+    private lazy var switchDay: UISwitch = {
+        let switchDay = UISwitch()
+        switchDay.translatesAutoresizingMaskIntoConstraints = false
+        switchDay.addTarget(self, action: #selector(switchTapped), for: .touchUpInside)
+        return switchDay
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -25,7 +32,7 @@ final class ScheduleViewCell: UITableViewCell {
         clipsToBounds = true
         
         contentView.addSubview(dayOfWeek)
-        let switchDay = switchDay()
+        addSubview(switchDay)
         
         NSLayoutConstraint.activate([
             dayOfWeek.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -39,15 +46,7 @@ final class ScheduleViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func switchDay() -> UISwitch {
-        let switchDay = UISwitch()
-        addSubview(switchDay)
-        switchDay.translatesAutoresizingMaskIntoConstraints = false
-        switchDay.addTarget(self, action: #selector(switchTapped), for: .touchUpInside)
-        return switchDay
-    }
-    
-    @objc func switchTapped(_ sender: UISwitch) {
+    @objc private func switchTapped(_ sender: UISwitch) {
         self.selectedDay = sender.isOn
     }
 }
