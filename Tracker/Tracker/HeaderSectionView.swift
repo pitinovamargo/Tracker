@@ -8,6 +8,7 @@
 import UIKit
 
 final class HeaderSectionView: UICollectionReusableView {
+    
     static let id = "header"
     var headerText: String? {
         didSet {
@@ -25,9 +26,8 @@ final class HeaderSectionView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         addSubview(titleLabel)
-        
+
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)

@@ -15,20 +15,22 @@ protocol TrackerCellDelegate: AnyObject {
 final class TrackerCell: UICollectionViewCell {
     
     static var reuseId = "cell"
-
+    weak var delegate: TrackerCellDelegate?
+    private var isCompletedToday: Bool = false
+    private var trackerId: UUID?
+    private var indexPath: IndexPath?
     
-    lazy var trackersDaysAmount: UILabel = {
+    private let trackersDaysAmount: UILabel = {
         let trackersDaysAmount = UILabel()
-        contentView.addSubview(trackersDaysAmount)
         trackersDaysAmount.frame = CGRect(x: 120, y: 106, width: 101, height: 18)
         trackersDaysAmount.translatesAutoresizingMaskIntoConstraints = false
         trackersDaysAmount.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         trackersDaysAmount.textColor = .ypBlackDay
         return trackersDaysAmount
     }()
-    lazy var trackerDescription: UILabel = {
+    
+    private let trackerDescription: UILabel = {
         let trackerDescription = UILabel()
-        contentView.addSubview(trackerDescription)
         trackerDescription.frame = CGRect(x: 120, y: 106, width: 143, height: 34)
         trackerDescription.translatesAutoresizingMaskIntoConstraints = false
         trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -38,50 +40,45 @@ final class TrackerCell: UICollectionViewCell {
         trackerDescription.preferredMaxLayoutWidth = 143
         return trackerDescription
     }()
-    lazy var trackerCard: UIView = {
+    
+    private lazy var trackerCard: UIView = {
         let trackerCard = UIView()
-        contentView.addSubview(trackerCard)
         trackerCard.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width * 0.55)
         trackerCard.layer.cornerRadius = 16
         return trackerCard
     }()
-    lazy var completedTrackerButton: UIButton = {
+    
+    private lazy var completedTrackerButton: UIButton = {
         let completedTrackerButton = UIButton(type: .custom)
-        contentView.addSubview(completedTrackerButton)
         completedTrackerButton.frame = CGRect(x: 100, y: 100, width: 34, height: 34)
         completedTrackerButton.translatesAutoresizingMaskIntoConstraints = false
         completedTrackerButton.addTarget(self, action: #selector(completedTracker), for: .touchUpInside)
         return completedTrackerButton
     }()
-
-    lazy var emojiBackground: UIView = {
+    
+    private let emojiBackground: UIView = {
         let emojiBackground = UIView()
-        contentView.addSubview(emojiBackground)
         emojiBackground.frame = CGRect(x: 12, y: 12, width: 24, height: 24)
         emojiBackground.backgroundColor = .ypWhiteDay
         emojiBackground.layer.cornerRadius = emojiBackground.frame.width / 2
         emojiBackground.layer.opacity = 0.3
         return emojiBackground
     }()
-    lazy var trackerEmoji: UILabel = {
+    
+    private let trackerEmoji: UILabel = {
         let trackerEmoji = UILabel()
-        contentView.addSubview(trackerEmoji)
         trackerEmoji.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
         trackerEmoji.translatesAutoresizingMaskIntoConstraints = false
         trackerEmoji.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return trackerEmoji
     }()
-
-    weak var delegate: TrackerCellDelegate?
-    private var isCompletedToday: Bool = false
-    private var trackerId: UUID?
-    private var indexPath: IndexPath?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
+        addSubviews()
         
         NSLayoutConstraint.activate([
             trackersDaysAmount.topAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: 16),
@@ -105,20 +102,29 @@ final class TrackerCell: UICollectionViewCell {
         self.trackerId = tracker.id
         self.trackerCard.backgroundColor = tracker.color
         trackerDescription.text = tracker.title
-        trackerEmoji.text = "😜"
+        trackerEmoji.text = tracker.emoji
         trackersDaysAmount.text = formatCompletedDays(completedDays)
         
         let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
         completedTrackerButton.setImage(image, for: .normal)
     }
     
-    func formatCompletedDays(_ completedDays: Int) -> String {
+    private func addSubviews() {
+        contentView.addSubview(trackersDaysAmount)
+        contentView.addSubview(trackerCard)
+        contentView.addSubview(completedTrackerButton)
+        contentView.addSubview(emojiBackground)
+        contentView.addSubview(trackerEmoji)
+        contentView.addSubview(trackerDescription)
+    }
+    
+    private func formatCompletedDays(_ completedDays: Int) -> String {
         let lastDigit = completedDays % 10
         let lastTwoDigits = completedDays % 100
         if lastTwoDigits >= 11 && lastTwoDigits <= 19 {
             return "\(completedDays) дней"
         }
-
+        
         switch lastDigit {
         case 1:
             return "\(completedDays) день"
@@ -128,8 +134,8 @@ final class TrackerCell: UICollectionViewCell {
             return "\(completedDays) дней"
         }
     }
-
-    @objc func completedTracker() {
+    
+    @objc private func completedTracker() {
         guard let trackerId = trackerId, let indexPath = indexPath else {
             assertionFailure("no trackerId")
             return
