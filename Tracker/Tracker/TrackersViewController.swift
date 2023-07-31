@@ -285,9 +285,16 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: TrackerCellDelegate {
     func completeTracker(id: UUID, at indexPath: IndexPath) {
-        let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
-        completedTrackers.append(trackerRecord)
-        collectionView.reloadItems(at: [indexPath])
+        let currentDate = Date()
+        let selectedDate = datePicker.date
+        let calendar = Calendar.current
+            if calendar.compare(selectedDate, to: currentDate, toGranularity: .day) != .orderedDescending {
+                let trackerRecord = TrackerRecord(id: id, date: selectedDate)
+                completedTrackers.append(trackerRecord)
+                collectionView.reloadItems(at: [indexPath])
+            } else {
+                return
+            }
     }
     
     func uncompleteTracker(id: UUID, at indexPath: IndexPath) {
