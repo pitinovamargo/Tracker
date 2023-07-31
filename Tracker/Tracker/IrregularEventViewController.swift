@@ -8,11 +8,10 @@
 import UIKit
 
 final class IrregularEventViewController: UIViewController {
-
+    
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
-    let clearButton = UIButton(type: .custom)
-    let createButton = UIButton(type: .custom)
-    let header: UILabel = {
+    
+    private let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
         header.text = "Новое нерегулярное событие"
@@ -21,7 +20,7 @@ final class IrregularEventViewController: UIViewController {
         return header
     }()
     
-    let addEventName: UITextField = {
+    private let addEventName: UITextField = {
         let addTrackerName = UITextField()
         addTrackerName.translatesAutoresizingMaskIntoConstraints = false
         addTrackerName.placeholder = "Введите название трекера"
@@ -36,24 +35,57 @@ final class IrregularEventViewController: UIViewController {
         return addTrackerName
     }()
     
-    let irregularEventTableView: UITableView = {
+    private let irregularEventTableView: UITableView = {
         let trackersTableView = UITableView()
         trackersTableView.translatesAutoresizingMaskIntoConstraints = false
         return trackersTableView
     }()
     
+    private lazy var cancelButton: UIButton = {
+        let cancelButton = UIButton(type: .custom)
+        cancelButton.setTitleColor(.ypRed, for: .normal)
+        cancelButton.layer.borderWidth = 1.0
+        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        return cancelButton
+    }()
+    
+    private lazy var clearButton: UIButton = {
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
+        clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
+        clearButton.contentMode = .scaleAspectFit
+        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        clearButton.isHidden = true
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
+        paddingView.addSubview(clearButton)
+        addEventName.rightView = paddingView
+        addEventName.rightViewMode = .whileEditing
+        return clearButton
+    }()
+    
+    private lazy var createButton: UIButton = {
+        let createButton = UIButton(type: .custom)
+        createButton.setTitleColor(.ypWhiteDay, for: .normal)
+        createButton.backgroundColor = .ypGray
+        createButton.layer.cornerRadius = 16
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        createButton.setTitle("Создать", for: .normal)
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        createButton.isEnabled = false
+        return createButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .ypWhiteDay
-                
-        view.addSubview(header)
-        view.addSubview(addEventName)
-        view.addSubview(irregularEventTableView)
         
-        let cancelButton = cancelButton()
-        configureCreateButton()
-        setupClearButton()
+        view.backgroundColor = .ypWhiteDay
+        addSubviews()
         
         addEventName.delegate = self
         irregularEventTableView.delegate = self
@@ -89,71 +121,29 @@ final class IrregularEventViewController: UIViewController {
         ])
     }
     
-    func setupClearButton() {
-        clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
-        clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
-        clearButton.contentMode = .scaleAspectFit
-        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        clearButton.isHidden = true
-
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
-        paddingView.addSubview(clearButton)
-        addEventName.rightView = paddingView
-        addEventName.rightViewMode = .whileEditing
-    }
-    
-    func cancelButton() -> UIButton {
-        let cancelButton = UIButton(type: .custom)
+    private func addSubviews() {
+        view.addSubview(header)
+        view.addSubview(addEventName)
+        view.addSubview(irregularEventTableView)
         view.addSubview(cancelButton)
-        cancelButton.setTitleColor(.ypRed, for: .normal)
-        cancelButton.layer.borderWidth = 1.0
-        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
-        cancelButton.layer.cornerRadius = 16
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        return cancelButton
-    }
-    
-    func configureCreateButton() {
         view.addSubview(createButton)
-        createButton.setTitleColor(.ypWhiteDay, for: .normal)
-        createButton.backgroundColor = .ypGray
-        createButton.layer.cornerRadius = 16
-        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        createButton.setTitle("Создать", for: .normal)
-        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.isEnabled = false
     }
     
-    @objc func clearTextField() {
+    @objc private func clearTextField() {
         addEventName.text = ""
-       }
+    }
     
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
     
     @objc private func createButtonTapped() {
-        
+        // настройка действия кнопки "Создать"
     }
 }
 
-extension IrregularEventViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: irregularEventCellReuseIdentifier, for: indexPath) as! IrregularEventCell
-        
-            cell.titleLabel.text = "Категория"
-        
-        return cell
-    }
-    
+// MARK: - UITableViewDelegate
+extension IrregularEventViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
@@ -163,6 +153,20 @@ extension IrregularEventViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
+// MARK: - UITableViewDataSource
+extension IrregularEventViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: irregularEventCellReuseIdentifier, for: indexPath) as! IrregularEventCell
+        cell.titleLabel.text = "Категория"
+        return cell
+    }
+}
+
+// MARK: - UITextFieldDelegate
 extension IrregularEventViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
@@ -174,7 +178,7 @@ extension IrregularEventViewController: UITextFieldDelegate {
             createButton.backgroundColor = .ypBlackDay
         }
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

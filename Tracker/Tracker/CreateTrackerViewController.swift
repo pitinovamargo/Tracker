@@ -19,8 +19,6 @@ final class CreateTrackerViewController: UIViewController {
     let cellReuseIdentifier = "CreateTrackersTableViewCell"
     
     private var selectedDays: [WeekDay] = []
-    private let clearButton = UIButton(type: .custom)
-    private let createButton: UIButton = UIButton(type: .custom)
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -73,13 +71,38 @@ final class CreateTrackerViewController: UIViewController {
         return trackersTableView
     }()
     
+    private lazy var clearButton: UIButton = {
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
+        clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
+        clearButton.contentMode = .scaleAspectFit
+        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        clearButton.isHidden = true
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
+        paddingView.addSubview(clearButton)
+        addTrackerName.rightView = paddingView
+        addTrackerName.rightViewMode = .whileEditing
+        return clearButton
+    }()
+    
+    private lazy var createButton: UIButton = {
+        let createButton: UIButton = UIButton(type: .custom)
+        createButton.setTitleColor(.ypWhiteDay, for: .normal)
+        createButton.backgroundColor = .ypGray
+        createButton.layer.cornerRadius = 16
+        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        createButton.setTitle("Создать", for: .normal)
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        createButton.isEnabled = false
+        return createButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .ypWhiteDay
         addSubviews()
-        configureCreateButton()
-        setupClearButton()
         
         addTrackerName.delegate = self
         trackersTableView.delegate = self
@@ -120,30 +143,7 @@ final class CreateTrackerViewController: UIViewController {
         view.addSubview(addTrackerName)
         view.addSubview(trackersTableView)
         view.addSubview(cancelButton)
-    }
-    
-    private func setupClearButton() {
-        clearButton.setImage(UIImage(named: "cleanKeyboard"), for: .normal)
-        clearButton.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
-        clearButton.contentMode = .scaleAspectFit
-        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        clearButton.isHidden = true
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 29, height: 17))
-        paddingView.addSubview(clearButton)
-        addTrackerName.rightView = paddingView
-        addTrackerName.rightViewMode = .whileEditing
-    }
-    
-    private func configureCreateButton() {
         view.addSubview(createButton)
-        createButton.setTitleColor(.ypWhiteDay, for: .normal)
-        createButton.backgroundColor = .ypGray
-        createButton.layer.cornerRadius = 16
-        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        createButton.setTitle("Создать", for: .normal)
-        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.isEnabled = false
     }
     
     @objc private func clearTextField() {

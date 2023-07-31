@@ -16,7 +16,7 @@ final class IrregularEventCell: UITableViewCell {
         return label
     }()
     
-    let chevronImage: UIImageView = {
+    private let chevronImage: UIImageView = {
         let chevronImage = UIImageView()
         chevronImage.image = UIImage(named: "Chevron")
         chevronImage.tintColor = .ypGray
@@ -36,7 +36,6 @@ final class IrregularEventCell: UITableViewCell {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            
             chevronImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             chevronImage.centerYAnchor.constraint(equalTo: centerYAnchor),
             chevronImage.widthAnchor.constraint(equalToConstant: 24),
