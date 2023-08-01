@@ -10,7 +10,17 @@ import UIKit
 final class IrregularEventViewController: UIViewController {
     
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
+    var trackersViewController: TrackersActions?
     
+    private let colors: [UIColor] = [
+        .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
+        .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
+        .ypColorSelection7, .ypColorSelection8, .ypColorSelection9,
+        .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
+        .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
+        .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
+    ]
+
     private let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -138,7 +148,13 @@ final class IrregularEventViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        // настройка действия кнопки "Создать"
+        guard let text = addEventName.text, !text.isEmpty else {
+            return
+        }
+        let newEvent = Tracker(title: text, color: colors[Int.random(in: 0..<self.colors.count)], emoji: "👍", schedule: WeekDay.allCases)
+        trackersViewController?.appendTracker(tracker: newEvent)
+        trackersViewController?.reload()
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
 

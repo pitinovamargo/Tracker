@@ -11,7 +11,7 @@ final class ScheduleViewCell: UITableViewCell {
     
     var selectedDay: Bool = false
     
-    let dayOfWeek: UILabel = {
+    private let dayOfWeek: UILabel = {
         let dayOfWeek = UILabel()
         dayOfWeek.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         dayOfWeek.translatesAutoresizingMaskIntoConstraints = false
@@ -20,6 +20,7 @@ final class ScheduleViewCell: UITableViewCell {
     
     private lazy var switchDay: UISwitch = {
         let switchDay = UISwitch()
+        switchDay.onTintColor = UIColor.ypBlue
         switchDay.translatesAutoresizingMaskIntoConstraints = false
         switchDay.addTarget(self, action: #selector(switchTapped), for: .touchUpInside)
         return switchDay
@@ -48,5 +49,9 @@ final class ScheduleViewCell: UITableViewCell {
     
     @objc private func switchTapped(_ sender: UISwitch) {
         self.selectedDay = sender.isOn
+    }
+    
+    func update(with title: String) {
+        dayOfWeek.text = title
     }
 }

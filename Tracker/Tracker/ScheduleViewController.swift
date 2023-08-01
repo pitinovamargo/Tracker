@@ -125,23 +125,23 @@ extension ScheduleViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as! ScheduleViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as? ScheduleViewCell else { return UITableViewCell() }
         
-        let dayOfWeek = WeekDay(rawValue: indexPath.row)
-        cell.dayOfWeek.text = dayOfWeek?.name
+        let dayOfWeek = WeekDay.allCases[indexPath.row]
+        cell.update(with: "\(dayOfWeek.name)")
         
         return cell
     }
 }
 
-enum WeekDay: Int {
-    case monday = 0
-    case tuesday
-    case wednesday
-    case thursday
-    case friday
-    case saturday
-    case sunday
+enum WeekDay: Int, CaseIterable {
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+    case sunday = 1
     
     var name: String {
         switch self {

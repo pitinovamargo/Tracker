@@ -9,7 +9,7 @@ import UIKit
 
 final class CreateTrackerViewCell: UITableViewCell {
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -45,5 +45,9 @@ final class CreateTrackerViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(with title: String) {
+         titleLabel.text = title
     }
 }

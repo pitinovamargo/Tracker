@@ -9,8 +9,8 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    var trackers: [Tracker] = []
-    var categories: [TrackerCategory] = []
+    private var trackers: [Tracker] = []
+    private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
@@ -156,7 +156,7 @@ final class TrackersViewController: UIViewController {
     private func selectCurrentDay() {
         let calendar = Calendar.current
         let filterWeekday = calendar.component(.weekday, from: datePicker.date)
-        self.selectedDate = filterWeekday - 2
+        self.selectedDate = filterWeekday
     }
     
     private func filterTrackers() {
@@ -277,11 +277,11 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     private func isTrackerCompletedToday(id: UUID) -> Bool {
         completedTrackers.contains { trackerRecord in
-            isSameTrackerrecord(trackerRecord: trackerRecord, id: id)
+            isSameTrackerRecord(trackerRecord: trackerRecord, id: id)
         }
     }
     
-    private func isSameTrackerrecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {
+    private func isSameTrackerRecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {
         let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
         return trackerRecord.id == id && isSameDay
     }
@@ -304,7 +304,7 @@ extension TrackersViewController: TrackerCellDelegate {
     
     func uncompleteTracker(id: UUID, at indexPath: IndexPath) {
         completedTrackers.removeAll { trackerRecord in
-            isSameTrackerrecord(trackerRecord: trackerRecord, id: id)
+            isSameTrackerRecord(trackerRecord: trackerRecord, id: id)
         }
         collectionView.reloadItems(at: [indexPath])
     }
@@ -327,23 +327,4 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 47)
     }
-}
-
-// MARK: - Structures
-struct Tracker {
-    let id = UUID()
-    let title: String
-    let color: UIColor
-    let emoji: String
-    let schedule: [WeekDay]?
-}
-
-struct TrackerCategory {
-    let header: String
-    let trackers: [Tracker]
-}
-
-struct TrackerRecord {
-    let id: UUID
-    let date: Date
 }

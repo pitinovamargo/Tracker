@@ -170,10 +170,7 @@ final class CreateTrackerViewController: UIViewController {
 extension CreateTrackerViewController: SelectedDays {
     func save(indicies: [Int]) {
         for index in indicies {
-            guard let day = WeekDay(rawValue: index) else {
-                return
-            }
-            self.selectedDays.append(day)
+            self.selectedDays.append(WeekDay.allCases[index])
         }
     }
 }
@@ -212,11 +209,11 @@ extension CreateTrackerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! CreateTrackerViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? CreateTrackerViewCell else { return UITableViewCell() }
         if indexPath.row == 0 {
-            cell.titleLabel.text = "Категория"
+            cell.update(with: "Категория")
         } else if indexPath.row == 1 {
-            cell.titleLabel.text = "Расписание"
+            cell.update(with: "Расписание")
         }
         return cell
     }
