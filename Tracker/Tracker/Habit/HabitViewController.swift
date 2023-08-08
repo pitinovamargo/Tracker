@@ -1,5 +1,5 @@
 //
-//  CreateTrackerViewController.swift
+//  HabitViewController.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 24.07.2023.
@@ -13,10 +13,12 @@ protocol TrackersActions {
     func showFirstStubScreen()
 }
 
-final class CreateTrackerViewController: UIViewController {
+final class HabitViewController: UIViewController {
     
     var trackersViewController: TrackersActions?
-    let cellReuseIdentifier = "CreateTrackersTableViewCell"
+    let cellReuseIdentifier = "HabitViewController"
+    
+    private let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     private var selectedDays: [WeekDay] = []
     private let colors: [UIColor] = [
@@ -26,6 +28,9 @@ final class CreateTrackerViewController: UIViewController {
         .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
         .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
         .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
+    ]
+    private let emoji: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶",
+                                   "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
     
     private let header: UILabel = {
@@ -107,10 +112,17 @@ final class CreateTrackerViewController: UIViewController {
         addTrackerName.delegate = self
         trackersTableView.delegate = self
         trackersTableView.dataSource = self
-        trackersTableView.register(CreateTrackerViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        trackersTableView.register(HabitViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         trackersTableView.layer.cornerRadius = 16
         trackersTableView.separatorStyle = .none
         
+        emojiCollectionView.dataSource = self
+        emojiCollectionView.delegate = self
+        emojiCollectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "Habit emoji cell")
+        emojiCollectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
+        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        emojiCollectionView.allowsMultipleSelection = false
+                
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: view.topAnchor),
             view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -134,7 +146,11 @@ final class CreateTrackerViewController: UIViewController {
             createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4)
+            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4),
+            emojiCollectionView.topAnchor.constraint(equalTo: trackersTableView.bottomAnchor, constant: 32),
+            emojiCollectionView.bottomAnchor.constraint(equalTo: createButton.topAnchor, constant: -16),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18)
         ])
     }
     
@@ -144,6 +160,7 @@ final class CreateTrackerViewController: UIViewController {
         view.addSubview(trackersTableView)
         view.addSubview(cancelButton)
         view.addSubview(createButton)
+        view.addSubview(emojiCollectionView)
     }
     
     @objc private func clearTextField() {
@@ -167,7 +184,7 @@ final class CreateTrackerViewController: UIViewController {
 }
 
 // MARK: - SelectedDays
-extension CreateTrackerViewController: SelectedDays {
+extension HabitViewController: SelectedDays {
     func save(indicies: [Int]) {
         for index in indicies {
             self.selectedDays.append(WeekDay.allCases[index])
@@ -176,7 +193,7 @@ extension CreateTrackerViewController: SelectedDays {
 }
 
 // MARK: - UITableViewDelegate
-extension CreateTrackerViewController: UITableViewDelegate {
+extension HabitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
@@ -203,13 +220,13 @@ extension CreateTrackerViewController: UITableViewDelegate {
 }
 
 // MARK: - UITableViewDataSource
-extension CreateTrackerViewController: UITableViewDataSource {
+extension HabitViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? CreateTrackerViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? HabitViewCell else { return UITableViewCell() }
         if indexPath.row == 0 {
             cell.update(with: "Категория")
         } else if indexPath.row == 1 {
@@ -220,7 +237,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
 }
 
 // MARK: - UITextFieldDelegate
-extension CreateTrackerViewController: UITextFieldDelegate {
+extension HabitViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
         if textField.text?.isEmpty ?? false {
@@ -235,5 +252,72 @@ extension CreateTrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+
+// MARK: - UICollectionViewDataSource
+extension HabitViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 18
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Habit emoji cell", for: indexPath) as? HabitEmojiCell else {
+            return UICollectionViewCell()
+        }
+        let emojiIndex = indexPath.item % emoji.count
+        let selectedEmoji = emoji[emojiIndex]
+        
+        cell.emojiLabel.text = selectedEmoji
+        cell.layer.cornerRadius = 16
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView:UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HabitEmojiHeader.id, for: indexPath) as? HabitEmojiHeader else {
+            return UICollectionReusableView()
+        }
+        header.headerText = "Emoji"
+        return header
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension HabitViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let collectionViewWidth = collectionView.bounds.width - 36
+        let cellWidth = collectionViewWidth / 6
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 18)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension HabitViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
+        cell?.backgroundColor = .ypLightGray
+       }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
+        cell?.backgroundColor = .ypWhiteDay
     }
 }

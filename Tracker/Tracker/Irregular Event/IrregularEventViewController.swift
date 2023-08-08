@@ -12,6 +12,7 @@ final class IrregularEventViewController: UIViewController {
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
     var trackersViewController: TrackersActions?
     
+    private let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -19,6 +20,9 @@ final class IrregularEventViewController: UIViewController {
         .ypColorSelection10, .ypColorSelection11, .ypColorSelection12,
         .ypColorSelection13, .ypColorSelection14, .ypColorSelection15,
         .ypColorSelection16, .ypColorSelection17, .ypColorSelection18
+    ]
+    private let emoji: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶",
+                                   "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
 
     private let header: UILabel = {
@@ -104,6 +108,13 @@ final class IrregularEventViewController: UIViewController {
         irregularEventTableView.layer.cornerRadius = 16
         irregularEventTableView.separatorStyle = .none
         
+        emojiCollectionView.dataSource = self
+        emojiCollectionView.delegate = self
+        emojiCollectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "Habit emoji cell")
+        emojiCollectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
+        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        emojiCollectionView.allowsMultipleSelection = false
+        
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: view.topAnchor),
             view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -127,7 +138,11 @@ final class IrregularEventViewController: UIViewController {
             createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4)
+            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4),
+            emojiCollectionView.topAnchor.constraint(equalTo: irregularEventTableView.bottomAnchor, constant: 32),
+            emojiCollectionView.bottomAnchor.constraint(equalTo: createButton.topAnchor, constant: -16),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18)
         ])
     }
     
@@ -198,5 +213,71 @@ extension IrregularEventViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension IrregularEventViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 18
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Event emoji cell", for: indexPath) as? EventEmojiCell else {
+            return UICollectionViewCell()
+        }
+        let emojiIndex = indexPath.item % emoji.count
+        let selectedEmoji = emoji[emojiIndex]
+        
+        cell.emojiLabel.text = selectedEmoji
+        cell.layer.cornerRadius = 16
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView:UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EventEmojiHeader.id, for: indexPath) as? EventEmojiHeader else {
+            return UICollectionReusableView()
+        }
+        header.headerText = "Emoji"
+        return header
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension IrregularEventViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let collectionViewWidth = collectionView.bounds.width - 36
+        let cellWidth = collectionViewWidth / 6
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 18)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension IrregularEventViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? EventEmojiCell
+        cell?.backgroundColor = .ypLightGray
+       }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? EventEmojiCell
+        cell?.backgroundColor = .ypWhiteDay
     }
 }
