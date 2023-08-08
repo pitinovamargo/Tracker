@@ -110,8 +110,8 @@ final class IrregularEventViewController: UIViewController {
         
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
-        emojiCollectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "Habit emoji cell")
-        emojiCollectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
+        emojiCollectionView.register(EventEmojiCell.self, forCellWithReuseIdentifier: "Event emoji cell")
+        emojiCollectionView.register(EventEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EventEmojiHeader.id)
         emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
         emojiCollectionView.allowsMultipleSelection = false
         
@@ -152,6 +152,7 @@ final class IrregularEventViewController: UIViewController {
         view.addSubview(irregularEventTableView)
         view.addSubview(cancelButton)
         view.addSubview(createButton)
+        view.addSubview(emojiCollectionView)
     }
     
     @objc private func clearTextField() {
