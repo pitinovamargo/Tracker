@@ -18,8 +18,6 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
-    private let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
     private var selectedDays: [WeekDay] = []
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
@@ -103,6 +101,24 @@ final class HabitViewController: UIViewController {
         return createButton
     }()
     
+    private let emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "Habit emoji cell")
+        collectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
+        collectionView.allowsMultipleSelection = false
+        return collectionView
+    }()
+    
+    private let colorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(HabitColorCell.self, forCellWithReuseIdentifier: "Habit color cell")
+        collectionView.register(HabitColorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitColorHeader.id)
+        collectionView.allowsMultipleSelection = false
+        return collectionView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,11 +134,12 @@ final class HabitViewController: UIViewController {
         
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
-        emojiCollectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "Habit emoji cell")
-        emojiCollectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
         emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        emojiCollectionView.allowsMultipleSelection = false
-                
+        
+        colorCollectionView.dataSource = self
+        colorCollectionView.delegate = self
+        colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: view.topAnchor),
             view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -148,9 +165,13 @@ final class HabitViewController: UIViewController {
             createButton.heightAnchor.constraint(equalToConstant: 60),
             createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4),
             emojiCollectionView.topAnchor.constraint(equalTo: trackersTableView.bottomAnchor, constant: 32),
-            emojiCollectionView.bottomAnchor.constraint(equalTo: createButton.topAnchor, constant: -16),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
             emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18)
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            colorCollectionView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            colorCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18)
         ])
     }
     
@@ -161,6 +182,7 @@ final class HabitViewController: UIViewController {
         view.addSubview(cancelButton)
         view.addSubview(createButton)
         view.addSubview(emojiCollectionView)
+        view.addSubview(colorCollectionView)
     }
     
     @objc private func clearTextField() {
@@ -255,7 +277,6 @@ extension HabitViewController: UITextFieldDelegate {
     }
 }
 
-
 // MARK: - UICollectionViewDataSource
 extension HabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -263,24 +284,50 @@ extension HabitViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Habit emoji cell", for: indexPath) as? HabitEmojiCell else {
-            return UICollectionViewCell()
+        if collectionView == emojiCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Habit emoji cell", for: indexPath) as? HabitEmojiCell else {
+                return UICollectionViewCell()
+            }
+            let emojiIndex = indexPath.item % emoji.count
+            let selectedEmoji = emoji[emojiIndex]
+            
+            cell.emojiLabel.text = selectedEmoji
+            cell.layer.cornerRadius = 16
+            
+            return cell
+        } else if collectionView == colorCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Habit color cell", for: indexPath) as? HabitColorCell else {
+                return UICollectionViewCell()
+            }
+            
+            let colorIndex = indexPath.item % colors.count
+            let selectedColor = colors[colorIndex]
+            
+            cell.colorView.backgroundColor = selectedColor
+            cell.layer.cornerRadius = 8
+            
+            return cell
         }
-        let emojiIndex = indexPath.item % emoji.count
-        let selectedEmoji = emoji[emojiIndex]
-        
-        cell.emojiLabel.text = selectedEmoji
-        cell.layer.cornerRadius = 16
-        
-        return cell
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView:UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HabitEmojiHeader.id, for: indexPath) as? HabitEmojiHeader else {
-            return UICollectionReusableView()
+        
+        if collectionView == emojiCollectionView {
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HabitEmojiHeader.id, for: indexPath) as? HabitEmojiHeader else {
+                return UICollectionReusableView()
+            }
+            header.headerText = "Emoji"
+            return header
+        } else if collectionView == colorCollectionView {
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HabitColorHeader.id, for: indexPath) as? HabitColorHeader else {
+                return UICollectionReusableView()
+            }
+            header.headerText = "Цвет"
+            return header
         }
-        header.headerText = "Emoji"
-        return header
+        
+        return UICollectionReusableView()
     }
 }
 
@@ -307,17 +354,29 @@ extension HabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
     }
+    
 }
 
 // MARK: - UICollectionViewDelegate
 extension HabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
-        cell?.backgroundColor = .ypLightGray
-       }
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
+            cell?.backgroundColor = .ypLightGray
+        } else if collectionView == colorCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? HabitColorCell
+            cell?.layer.borderWidth = 3
+            cell?.layer.borderColor = cell?.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
-        cell?.backgroundColor = .ypWhiteDay
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
+            cell?.backgroundColor = .ypWhiteDay
+        } else if collectionView == colorCollectionView {
+            let cell = collectionView.cellForItem(at: indexPath) as? HabitColorCell
+            cell?.layer.borderWidth = 0
+        }
     }
 }
