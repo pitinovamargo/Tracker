@@ -18,8 +18,8 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
-    var selectedColor: UIColor?
-    var selectedEmoji: String?
+    private var selectedColor: UIColor?
+    private var selectedEmoji: String?
     
     private var selectedDays: [WeekDay] = []
     private let colors: [UIColor] = [
@@ -117,7 +117,6 @@ final class HabitViewController: UIViewController {
         collectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "HabitEmojiCell")
         collectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
         collectionView.allowsMultipleSelection = false
-        collectionView.scrollsToTop = false
         return collectionView
     }()
     
@@ -127,7 +126,6 @@ final class HabitViewController: UIViewController {
         collectionView.register(HabitColorCell.self, forCellWithReuseIdentifier: "HabitColorCell")
         collectionView.register(HabitColorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitColorHeader.id)
         collectionView.allowsMultipleSelection = false
-        collectionView.scrollsToTop = false
         return collectionView
     }()
     
@@ -136,6 +134,7 @@ final class HabitViewController: UIViewController {
         
         view.backgroundColor = .ypWhiteDay
         addSubviews()
+        activateConstraints()
         
         addTrackerName.delegate = self
         trackersTableView.delegate = self
@@ -151,7 +150,20 @@ final class HabitViewController: UIViewController {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-
+    }
+    
+    private func addSubviews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(header)
+        scrollView.addSubview(addTrackerName)
+        scrollView.addSubview(trackersTableView)
+        scrollView.addSubview(emojiCollectionView)
+        scrollView.addSubview(colorCollectionView)
+        scrollView.addSubview(createButton)
+        scrollView.addSubview(cancelButton)
+    }
+    
+    private func activateConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -187,17 +199,6 @@ final class HabitViewController: UIViewController {
             createButton.heightAnchor.constraint(equalToConstant: 60),
             createButton.leadingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: 4)
         ])
-    }
-    
-    private func addSubviews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(header)
-        scrollView.addSubview(addTrackerName)
-        scrollView.addSubview(trackersTableView)
-        scrollView.addSubview(emojiCollectionView)
-        scrollView.addSubview(colorCollectionView)
-        scrollView.addSubview(createButton)
-        scrollView.addSubview(cancelButton)
     }
     
     @objc private func clearTextField() {

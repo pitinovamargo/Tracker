@@ -12,6 +12,9 @@ final class IrregularEventViewController: UIViewController {
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
     var trackersViewController: TrackersActions?
     
+    private var selectedColor: UIColor?
+    private var selectedEmoji: String?
+    
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -23,6 +26,13 @@ final class IrregularEventViewController: UIViewController {
     private let emoji: [String] = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶",
                                    "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isScrollEnabled = true
+        return scrollView
+    }()
     
     private let header: UILabel = {
         let header = UILabel()
@@ -117,6 +127,7 @@ final class IrregularEventViewController: UIViewController {
         
         view.backgroundColor = .ypWhiteDay
         addSubviews()
+        activateConstraints()
         
         addEventName.delegate = self
         irregularEventTableView.delegate = self
@@ -132,50 +143,55 @@ final class IrregularEventViewController: UIViewController {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: view.topAnchor),
-            view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            header.topAnchor.constraint(equalTo: view.topAnchor, constant: 26),
-            header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addEventName.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 38),
-            addEventName.centerXAnchor.constraint(equalTo: header.centerXAnchor),
-            addEventName.heightAnchor.constraint(equalToConstant: 75),
-            addEventName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            addEventName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            irregularEventTableView.topAnchor.constraint(equalTo: addEventName.bottomAnchor, constant: 24),
-            irregularEventTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            irregularEventTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            irregularEventTableView.heightAnchor.constraint(equalToConstant: 75),
-            emojiCollectionView.topAnchor.constraint(equalTo: irregularEventTableView.bottomAnchor, constant: 32),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
-            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
-            colorCollectionView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
-            colorCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
-            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(view.frame.width/2) - 4),
-            cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4)
-        ])
     }
     
     private func addSubviews() {
-        view.addSubview(header)
-        view.addSubview(addEventName)
-        view.addSubview(irregularEventTableView)
-        view.addSubview(cancelButton)
-        view.addSubview(createButton)
-        view.addSubview(emojiCollectionView)
-        view.addSubview(colorCollectionView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(header)
+        scrollView.addSubview(addEventName)
+        scrollView.addSubview(irregularEventTableView)
+        scrollView.addSubview(emojiCollectionView)
+        scrollView.addSubview(colorCollectionView)
+        scrollView.addSubview(cancelButton)
+        scrollView.addSubview(createButton)
+    }
+    
+    private func activateConstraints() {
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            header.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 26),
+            header.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            header.heightAnchor.constraint(equalToConstant: 22),
+            addEventName.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 38),
+            addEventName.centerXAnchor.constraint(equalTo: header.centerXAnchor),
+            addEventName.heightAnchor.constraint(equalToConstant: 75),
+            addEventName.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            addEventName.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            irregularEventTableView.topAnchor.constraint(equalTo: addEventName.bottomAnchor, constant: 24),
+            irregularEventTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            irregularEventTableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            irregularEventTableView.heightAnchor.constraint(equalToConstant: 75),
+            emojiCollectionView.topAnchor.constraint(equalTo: irregularEventTableView.bottomAnchor, constant: 32),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
+            colorCollectionView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 222),
+            colorCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
+            colorCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
+            cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 16),
+            cancelButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
+            cancelButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: -4),
+            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            createButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
+            createButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            createButton.heightAnchor.constraint(equalToConstant: 60),
+            createButton.leadingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: 4)
+        ])
     }
     
     @objc private func clearTextField() {
@@ -187,10 +203,12 @@ final class IrregularEventViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        guard let text = addEventName.text, !text.isEmpty else {
+        guard let text = addEventName.text, !text.isEmpty,
+              let color = selectedColor,
+              let emoji = selectedEmoji else {
             return
         }
-        let newEvent = Tracker(title: text, color: colors[Int.random(in: 0..<self.colors.count)], emoji: "👍", schedule: WeekDay.allCases)
+        let newEvent = Tracker(title: text, color: color, emoji: emoji, schedule: WeekDay.allCases)
         trackersViewController?.appendTracker(tracker: newEvent)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -326,10 +344,14 @@ extension IrregularEventViewController: UICollectionViewDelegate {
         if collectionView == emojiCollectionView {
             let cell = collectionView.cellForItem(at: indexPath) as? EventEmojiCell
             cell?.backgroundColor = .ypLightGray
+            
+            selectedEmoji = cell?.emojiLabel.text
         } else if collectionView == colorCollectionView {
             let cell = collectionView.cellForItem(at: indexPath) as? EventColorCell
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = cell?.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+            
+            selectedColor = cell?.colorView.backgroundColor
         }
     }
     
