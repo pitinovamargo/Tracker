@@ -129,17 +129,31 @@ final class IrregularEventViewController: UIViewController {
         addSubviews()
         activateConstraints()
         
+        setupEventNameTextField()
+        setupIrregularEventTableView()
+        setupEmojiCollectionView()
+        setupColorCollectionView()
+    }
+
+    private func setupEventNameTextField() {
         addEventName.delegate = self
+    }
+
+    private func setupIrregularEventTableView() {
         irregularEventTableView.delegate = self
         irregularEventTableView.dataSource = self
         irregularEventTableView.register(IrregularEventCell.self, forCellReuseIdentifier: irregularEventCellReuseIdentifier)
         irregularEventTableView.layer.cornerRadius = 16
         irregularEventTableView.separatorStyle = .none
-        
+    }
+
+    private func setupEmojiCollectionView() {
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
         emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+
+    private func setupColorCollectionView() {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false

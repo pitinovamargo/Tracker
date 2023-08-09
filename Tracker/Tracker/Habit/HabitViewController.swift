@@ -136,17 +136,31 @@ final class HabitViewController: UIViewController {
         addSubviews()
         activateConstraints()
         
+        setupTrackerNameTextField()
+        setupTrackersTableView()
+        setupEmojiCollectionView()
+        setupColorCollectionView()
+    }
+
+    private func setupTrackerNameTextField() {
         addTrackerName.delegate = self
+    }
+
+    private func setupTrackersTableView() {
         trackersTableView.delegate = self
         trackersTableView.dataSource = self
         trackersTableView.register(HabitViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         trackersTableView.layer.cornerRadius = 16
         trackersTableView.separatorStyle = .none
-        
+    }
+
+    private func setupEmojiCollectionView() {
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
         emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+
+    private func setupColorCollectionView() {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
