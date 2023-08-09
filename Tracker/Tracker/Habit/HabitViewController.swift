@@ -117,6 +117,7 @@ final class HabitViewController: UIViewController {
         collectionView.register(HabitEmojiCell.self, forCellWithReuseIdentifier: "HabitEmojiCell")
         collectionView.register(HabitEmojiHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitEmojiHeader.id)
         collectionView.allowsMultipleSelection = false
+        collectionView.scrollsToTop = false
         return collectionView
     }()
     
@@ -126,6 +127,7 @@ final class HabitViewController: UIViewController {
         collectionView.register(HabitColorCell.self, forCellWithReuseIdentifier: "HabitColorCell")
         collectionView.register(HabitColorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HabitColorHeader.id)
         collectionView.allowsMultipleSelection = false
+        collectionView.scrollsToTop = false
         return collectionView
     }()
     
@@ -149,14 +151,12 @@ final class HabitViewController: UIViewController {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: 1014)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.heightAnchor.constraint(equalToConstant: 1014),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             header.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 26),
             header.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             header.heightAnchor.constraint(equalToConstant: 22),
@@ -177,16 +177,15 @@ final class HabitViewController: UIViewController {
             colorCollectionView.heightAnchor.constraint(equalToConstant: 222),
             colorCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
             colorCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -18),
-            cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
-            cancelButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -34),
+            cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 16),
+            cancelButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             cancelButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            cancelButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -(scrollView.frame.width/2) - 4),
+            cancelButton.trailingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: -4),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 40),
-            createButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -34),
+            createButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             createButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: (scrollView.frame.width/2) + 4)
+            createButton.leadingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: 4)
         ])
     }
     

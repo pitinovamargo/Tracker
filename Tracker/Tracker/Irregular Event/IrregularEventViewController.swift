@@ -149,14 +149,6 @@ final class IrregularEventViewController: UIViewController {
             irregularEventTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             irregularEventTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             irregularEventTableView.heightAnchor.constraint(equalToConstant: 75),
-            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(view.frame.width/2) - 4),
-            cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4),
             emojiCollectionView.topAnchor.constraint(equalTo: irregularEventTableView.bottomAnchor, constant: 32),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
             emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
@@ -164,7 +156,15 @@ final class IrregularEventViewController: UIViewController {
             colorCollectionView.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
             colorCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18)
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(view.frame.width/2) - 4),
+            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            createButton.heightAnchor.constraint(equalToConstant: 60),
+            createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (view.frame.width/2) + 4)
         ])
     }
     
