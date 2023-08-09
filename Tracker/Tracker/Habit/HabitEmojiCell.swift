@@ -9,7 +9,7 @@ import UIKit
 
 final class HabitEmojiCell: UICollectionViewCell {
     
-    static var reuseId = "Habit emoji cell"
+    static var reuseId = "HabitEmojiCell"
     
     let emojiLabel: UILabel = {
         let label = UILabel()

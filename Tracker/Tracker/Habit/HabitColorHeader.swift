@@ -9,7 +9,7 @@ import UIKit
 
 final class HabitColorHeader: UICollectionReusableView {
     
-    static let id = "header"
+    static let id = "HabitColorHeader"
     var headerText: String? {
         didSet {
             titleLabel.text = headerText

@@ -9,7 +9,7 @@ import UIKit
 
 final class HabitColorCell: UICollectionViewCell {
     
-    static var reuseId = "Habit color cell"
+    static var reuseId = "HabitColorCell"
     
     let colorView: UIView = {
         let view = UIView()
