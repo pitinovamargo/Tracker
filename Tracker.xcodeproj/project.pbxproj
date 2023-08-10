@@ -35,6 +35,7 @@
 		6475757C2A6EE56D00C57C04 /* ScheduleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475757B2A6EE56D00C57C04 /* ScheduleViewCell.swift */; };
 		6475757E2A6FD74200C57C04 /* IrregularEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475757D2A6FD74200C57C04 /* IrregularEventViewController.swift */; };
 		647575802A6FE84000C57C04 /* IrregularEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6475757F2A6FE84000C57C04 /* IrregularEventCell.swift */; };
+		64A32E2C2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 64A32E2A2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		6475757B2A6EE56D00C57C04 /* ScheduleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewCell.swift; sourceTree = "<group>"; };
 		6475757D2A6FD74200C57C04 /* IrregularEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularEventViewController.swift; sourceTree = "<group>"; };
 		6475757F2A6FE84000C57C04 /* IrregularEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularEventCell.swift; sourceTree = "<group>"; };
+		64A32E2B2A8517D90069D2D0 /* TrackersEntity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackersEntity.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,8 +151,9 @@
 			children = (
 				6460DF592A408EB3004A31C6 /* ViewController.swift */,
 				647575612A5899CF00C57C04 /* TabBarController.swift */,
-				647575672A58A1F000C57C04 /* Statistic */,
 				647575682A58A1FF00C57C04 /* Tracker */,
+				647575672A58A1F000C57C04 /* Statistic */,
+				64A32E292A85169B0069D2D0 /* Core Data */,
 				641441B32A56023C004D6BD7 /* Resources */,
 				641441B02A560178004D6BD7 /* Helper */,
 				6460DF632A408EB5004A31C6 /* Info.plist */,
@@ -179,6 +182,14 @@
 				6406E9C82A825A2B003DFB6B /* Irregular Event */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		64A32E292A85169B0069D2D0 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				64A32E2A2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld */,
+			);
+			path = "Core Data";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +268,7 @@
 				6406E9BE2A796467003DFB6B /* TrackerStructures.swift in Sources */,
 				647575782A6EC67800C57C04 /* HabitViewCell.swift in Sources */,
 				647575802A6FE84000C57C04 /* IrregularEventCell.swift in Sources */,
+				64A32E2C2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld in Sources */,
 				6406E9C22A8259D0003DFB6B /* HabitColorCell.swift in Sources */,
 				6460DF5A2A408EB3004A31C6 /* ViewController.swift in Sources */,
 				641441B22A560189004D6BD7 /* UIColor+Extensions.swift in Sources */,
@@ -481,6 +493,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		64A32E2A2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				64A32E2B2A8517D90069D2D0 /* TrackersEntity.xcdatamodel */,
+			);
+			currentVersion = 64A32E2B2A8517D90069D2D0 /* TrackersEntity.xcdatamodel */;
+			path = TrackersEntity.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6460DF4A2A408EB3004A31C6 /* Project object */;
 }
