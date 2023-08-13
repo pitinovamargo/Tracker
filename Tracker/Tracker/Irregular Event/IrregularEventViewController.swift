@@ -222,7 +222,7 @@ final class IrregularEventViewController: UIViewController {
               let emoji = selectedEmoji else {
             return
         }
-        let newEvent = Tracker(title: text, color: color, emoji: emoji, schedule: WeekDay.allCases)
+        let newEvent = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: WeekDay.allCases)
         trackersViewController?.appendTracker(tracker: newEvent)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)

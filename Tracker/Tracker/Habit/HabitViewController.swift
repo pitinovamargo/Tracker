@@ -231,7 +231,7 @@ final class HabitViewController: UIViewController {
             return
         }
         
-        let newTracker = Tracker(title: text, color: color, emoji: emoji, schedule: self.selectedDays)
+        let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
