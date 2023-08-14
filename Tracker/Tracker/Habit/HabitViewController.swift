@@ -254,7 +254,10 @@ extension HabitViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
+            let addCategoryViewController = CategoryViewController()
+            present(addCategoryViewController, animated: true, completion: nil)
+        } else if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.createTrackerViewController = self
             present(scheduleViewController, animated: true, completion: nil)
