@@ -71,7 +71,7 @@ final class AddTrackerViewController: UIViewController {
     }
     
     @objc private func habitButtonTapped() {
-        let addHabit = CreateTrackerViewController()
+        let addHabit = HabitViewController()
         addHabit.trackersViewController = self.trackersViewController
         present(addHabit, animated: true)
     }
