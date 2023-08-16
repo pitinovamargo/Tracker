@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CategoryCell: UITableViewCell {
+final class HabitCategoryCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -16,12 +16,11 @@ final class CategoryCell: UITableViewCell {
         return label
     }()
     
-    private let chevronImage: UIImageView = {
-        let chevronImage = UIImageView()
-        chevronImage.image = UIImage(named: "Chevron")
-        chevronImage.tintColor = .ypGray
-        chevronImage.translatesAutoresizingMaskIntoConstraints = false
-        return chevronImage
+    let doneImage: UIImageView = {
+        let doneImage = UIImageView()
+//        doneImage.image = UIImage(named: "Done")
+        doneImage.translatesAutoresizingMaskIntoConstraints = false
+        return doneImage
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -31,15 +30,15 @@ final class CategoryCell: UITableViewCell {
         clipsToBounds = true
         
         addSubview(titleLabel)
-        addSubview(chevronImage)
+        addSubview(doneImage)
         
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            chevronImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            chevronImage.centerYAnchor.constraint(equalTo: centerYAnchor),
-            chevronImage.widthAnchor.constraint(equalToConstant: 24),
-            chevronImage.heightAnchor.constraint(equalToConstant: 24)
+            doneImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            doneImage.centerYAnchor.constraint(equalTo: centerYAnchor),
+            doneImage.widthAnchor.constraint(equalToConstant: 24),
+            doneImage.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
     
@@ -49,5 +48,9 @@ final class CategoryCell: UITableViewCell {
     
     func update(with title: String) {
          titleLabel.text = title
+    }
+    
+    func done(with image: UIImage) {
+        doneImage.image = image
     }
 }

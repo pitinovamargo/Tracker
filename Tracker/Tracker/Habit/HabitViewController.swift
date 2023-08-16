@@ -194,7 +194,7 @@ final class HabitViewController: UIViewController {
             trackersTableView.topAnchor.constraint(equalTo: addTrackerName.bottomAnchor, constant: 24),
             trackersTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             trackersTableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-            trackersTableView.heightAnchor.constraint(equalToConstant: 149),
+            trackersTableView.heightAnchor.constraint(equalToConstant: 150),
             emojiCollectionView.topAnchor.constraint(equalTo: trackersTableView.bottomAnchor, constant: 32),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
             emojiCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
@@ -255,7 +255,7 @@ extension HabitViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let addCategoryViewController = CategoryViewController()
+            let addCategoryViewController = HabitCategoryViewController()
             present(addCategoryViewController, animated: true, completion: nil)
         } else if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()
@@ -271,9 +271,14 @@ extension HabitViewController: UITableViewDelegate {
         let separatorHeight: CGFloat = 1.0
         let separatorX = separatorInset
         let separatorY = cell.frame.height - separatorHeight
-        let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
-        separatorView.backgroundColor = .ypGray
-        cell.addSubview(separatorView)
+        
+        let isLastCell = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+        
+        if !isLastCell {
+            let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
+            separatorView.backgroundColor = .ypGray
+            cell.addSubview(separatorView)
+        }
     }
 }
 

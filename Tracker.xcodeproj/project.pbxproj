@@ -21,9 +21,9 @@
 		6406E9CE2A825B06003DFB6B /* EventEmojiHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6406E9CD2A825B06003DFB6B /* EventEmojiHeader.swift */; };
 		6406E9D02A825B17003DFB6B /* EventColorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6406E9CF2A825B17003DFB6B /* EventColorHeader.swift */; };
 		641441B22A560189004D6BD7 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641441B12A560188004D6BD7 /* UIColor+Extensions.swift */; };
-		645482F02A8AAFFC007F5BF3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482EF2A8AAFFC007F5BF3 /* CategoryViewController.swift */; };
-		645482F22A8AB02B007F5BF3 /* CreateCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F12A8AB02B007F5BF3 /* CreateCategoryViewController.swift */; };
-		645482F42A8AB046007F5BF3 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F32A8AB046007F5BF3 /* CategoryCell.swift */; };
+		645482F02A8AAFFC007F5BF3 /* HabitCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482EF2A8AAFFC007F5BF3 /* HabitCategoryViewController.swift */; };
+		645482F22A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F12A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift */; };
+		645482F42A8AB046007F5BF3 /* HabitCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F32A8AB046007F5BF3 /* HabitCategoryCell.swift */; };
 		6460DF562A408EB3004A31C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF552A408EB3004A31C6 /* AppDelegate.swift */; };
 		6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF572A408EB3004A31C6 /* SceneDelegate.swift */; };
 		6460DF5A2A408EB3004A31C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF592A408EB3004A31C6 /* ViewController.swift */; };
@@ -60,9 +60,9 @@
 		6406E9CD2A825B06003DFB6B /* EventEmojiHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmojiHeader.swift; sourceTree = "<group>"; };
 		6406E9CF2A825B17003DFB6B /* EventColorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventColorHeader.swift; sourceTree = "<group>"; };
 		641441B12A560188004D6BD7 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
-		645482EF2A8AAFFC007F5BF3 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
-		645482F12A8AB02B007F5BF3 /* CreateCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewController.swift; sourceTree = "<group>"; };
-		645482F32A8AB046007F5BF3 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		645482EF2A8AAFFC007F5BF3 /* HabitCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCategoryViewController.swift; sourceTree = "<group>"; };
+		645482F12A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateHabitCategoryViewController.swift; sourceTree = "<group>"; };
+		645482F32A8AB046007F5BF3 /* HabitCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCategoryCell.swift; sourceTree = "<group>"; };
 		6460DF522A408EB3004A31C6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6460DF552A408EB3004A31C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6460DF572A408EB3004A31C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 				6406E9C12A8259D0003DFB6B /* HabitColorCell.swift */,
 				6406E9CB2A825AEF003DFB6B /* HabitColorHeader.swift */,
 				645482ED2A8AAFB2007F5BF3 /* Schedule */,
-				645482EE2A8AAFC3007F5BF3 /* Category */,
+				645482EE2A8AAFC3007F5BF3 /* Habit Category */,
 			);
 			path = Habit;
 			sourceTree = "<group>";
@@ -164,14 +164,14 @@
 			path = Schedule;
 			sourceTree = "<group>";
 		};
-		645482EE2A8AAFC3007F5BF3 /* Category */ = {
+		645482EE2A8AAFC3007F5BF3 /* Habit Category */ = {
 			isa = PBXGroup;
 			children = (
-				645482EF2A8AAFFC007F5BF3 /* CategoryViewController.swift */,
-				645482F12A8AB02B007F5BF3 /* CreateCategoryViewController.swift */,
-				645482F32A8AB046007F5BF3 /* CategoryCell.swift */,
+				645482EF2A8AAFFC007F5BF3 /* HabitCategoryViewController.swift */,
+				645482F12A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift */,
+				645482F32A8AB046007F5BF3 /* HabitCategoryCell.swift */,
 			);
-			path = Category;
+			path = "Habit Category";
 			sourceTree = "<group>";
 		};
 		6460DF492A408EB3004A31C6 = {
@@ -328,8 +328,8 @@
 				6475757C2A6EE56D00C57C04 /* ScheduleViewCell.swift in Sources */,
 				6406E9D02A825B17003DFB6B /* EventColorHeader.swift in Sources */,
 				647575762A6EB6B500C57C04 /* HabitViewController.swift in Sources */,
-				645482F22A8AB02B007F5BF3 /* CreateCategoryViewController.swift in Sources */,
-				645482F02A8AAFFC007F5BF3 /* CategoryViewController.swift in Sources */,
+				645482F22A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift in Sources */,
+				645482F02A8AAFFC007F5BF3 /* HabitCategoryViewController.swift in Sources */,
 				6406E9C42A8259E8003DFB6B /* EventEmojiCell.swift in Sources */,
 				6406E9CE2A825B06003DFB6B /* EventEmojiHeader.swift in Sources */,
 				3411ADE52A86CD94006D21C9 /* TrackerCategoryStore.swift in Sources */,
@@ -340,7 +340,7 @@
 				6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */,
 				6406E9CA2A825ADC003DFB6B /* HabitEmojiHeader.swift in Sources */,
 				647575662A589C2300C57C04 /* StatisticViewController.swift in Sources */,
-				645482F42A8AB046007F5BF3 /* CategoryCell.swift in Sources */,
+				645482F42A8AB046007F5BF3 /* HabitCategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

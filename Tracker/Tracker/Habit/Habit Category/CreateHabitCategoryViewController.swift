@@ -7,7 +7,14 @@
 
 import UIKit
 
-final class CreateCategoryViewController: UIViewController {
+protocol CategoryActions {
+    func appendCategory(category: String)
+    func reload()
+}
+
+final class CreateHabitCategoryViewController: UIViewController {
+    
+    var categoryViewController: CategoryActions?
     
     private let header: UILabel = {
         let header = UILabel()
@@ -92,7 +99,14 @@ final class CreateCategoryViewController: UIViewController {
         view.addSubview(doneButton)
     }
     
+    
     @objc private func doneButtonTapped() {
+        guard let category = addCategoryName.text, !category.isEmpty else {
+            return
+        }        
+        categoryViewController?.appendCategory(category: category)
+        categoryViewController?.reload()
+        dismiss(animated: true, completion: nil)
     }
     
     @objc private func clearTextField() {
@@ -102,7 +116,7 @@ final class CreateCategoryViewController: UIViewController {
 }
 
 // MARK: - UITextFieldDelegate
-extension CreateCategoryViewController: UITextFieldDelegate {
+extension CreateHabitCategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
         if textField.text?.isEmpty ?? false {

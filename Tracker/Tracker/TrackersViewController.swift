@@ -193,6 +193,7 @@ final class TrackersViewController: UIViewController {
     }
 }
 
+// MARK: - TrackerStoreDelegate
 extension TrackersViewController: TrackerStoreDelegate {
     func store() {
         trackers = trackerStore.trackers
