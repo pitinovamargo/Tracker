@@ -29,7 +29,7 @@ final class HabitColorHeader: UICollectionReusableView {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }

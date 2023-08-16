@@ -22,6 +22,7 @@ final class HabitColorCell: UICollectionViewCell {
 
         contentView.addSubview(colorView)
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
 

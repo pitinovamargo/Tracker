@@ -174,6 +174,7 @@ final class TrackersViewController: UIViewController {
         showSecondStubScreen()
         collectionView.reloadData()
     }
+    
     private func filterVisibleCategories() {
         visibleCategories = categories.map { category in
             TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
