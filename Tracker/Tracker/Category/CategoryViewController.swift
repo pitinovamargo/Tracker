@@ -1,5 +1,5 @@
 //
-//  HabitCategoryViewController.swift
+//  CategoryViewController.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 14.08.2023.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-final class HabitCategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController {
     
     let cellReuseIdentifier = "HabitCategoryViewController"
-    private var categories: [String] = []
+    private(set) var viewModel: CategoryViewModel = CategoryViewModel()
     
     private let header: UILabel = {
         let header = UILabel()
@@ -103,20 +103,20 @@ final class HabitCategoryViewController: UIViewController {
     private func setupTrackersTableView() {
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
-        categoriesTableView.register(HabitCategoryCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        categoriesTableView.register(CategoryCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
     @objc private func addCategoryTapped() {
-        let сreateCategoryViewController = CreateHabitCategoryViewController()
+        let сreateCategoryViewController = CreateCategoryViewController()
         сreateCategoryViewController.categoryViewController = self
         present(сreateCategoryViewController, animated: true, completion: nil)
     }
 }
 
 // MARK: - CategoryActions
-extension HabitCategoryViewController: CategoryActions {
+extension CategoryViewController: CategoryActions {
     func appendCategory(category: String) {
-        self.categories.append(category)
+        viewModel.addCategory(category)
         categoriesTableView.isHidden = false
         emptyCategoryLogo.isHidden = true
         emptyCategoryText.isHidden = true
@@ -128,25 +128,26 @@ extension HabitCategoryViewController: CategoryActions {
 }
 
 // MARK: - UITableViewDelegate
-extension HabitCategoryViewController: UITableViewDelegate {
+extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.row < categories.count else {
+        guard indexPath.row < viewModel.categories.count else {
             return
         }
 
-        if let cell = tableView.cellForRow(at: indexPath) as? HabitCategoryCell {
+        if let cell = tableView.cellForRow(at: indexPath) as? CategoryCell {
             // сделать обновление image через функцию и вернуть private для doneImage
             cell.doneImage.image = UIImage(named: "Done")
+            viewModel.selectCategory(indexPath.row)
             tableView.deselectRow(at: indexPath, animated: true)
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.dismiss(animated: true, completion: nil)
-            }
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -167,19 +168,19 @@ extension HabitCategoryViewController: UITableViewDelegate {
 }
 
 // MARK: - UITableViewDataSource
-extension HabitCategoryViewController: UITableViewDataSource {
+extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? HabitCategoryCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
-        if indexPath.row < categories.count {
-            let categoryName = categories[indexPath.row]
+        if indexPath.row < viewModel.categories.count {
+            let categoryName = viewModel.categories[indexPath.row]
             cell.update(with: categoryName)
             
-            let isLastCell = indexPath.row == categories.count - 1
+            let isLastCell = indexPath.row == viewModel.categories.count - 1
             if isLastCell {
                 cell.layer.cornerRadius = 16
                 cell.layer.masksToBounds = true

@@ -216,12 +216,24 @@ extension TrackersViewController: UITextFieldDelegate {
 
 // MARK: - TrackersActions
 extension TrackersViewController: TrackersActions {
-    func appendTracker(tracker: Tracker) {
+    func appendTracker(tracker: Tracker, category: String?) {
+        guard let category = category else { return }
         try! self.trackerStore.addNewTracker(tracker)
-        self.categories = self.categories.map { category in
-            var updatedTrackers = category.trackers
-            updatedTrackers.append(tracker)
-            return TrackerCategory(header: category.header, trackers: updatedTrackers)
+        var foundCategory = self.categories.first { ctgry in
+            ctgry.header == category
+        }
+        if let found = foundCategory {
+            self.categories = self.categories.map { ctgry in
+                if (ctgry.header == category) {
+                    var updatedTrackers = ctgry.trackers
+                    updatedTrackers.append(tracker)
+                    return TrackerCategory(header: ctgry.header, trackers: updatedTrackers)
+                } else {
+                    return TrackerCategory(header: ctgry.header, trackers: ctgry.trackers)
+                }
+            }
+        } else {
+            self.categories.append(TrackerCategory(header: category, trackers: [tracker]))
         }
         filterTrackers()
     }

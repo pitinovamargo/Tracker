@@ -12,7 +12,7 @@ protocol CategoryActions {
     func reload()
 }
 
-final class CreateHabitCategoryViewController: UIViewController {
+final class CreateCategoryViewController: UIViewController {
     
     var categoryViewController: CategoryActions?
     
@@ -116,7 +116,7 @@ final class CreateHabitCategoryViewController: UIViewController {
 }
 
 // MARK: - UITextFieldDelegate
-extension CreateHabitCategoryViewController: UITextFieldDelegate {
+extension CreateCategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         clearButton.isHidden = textField.text?.isEmpty ?? true
         if textField.text?.isEmpty ?? false {

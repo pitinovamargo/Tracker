@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TrackersActions {
-    func appendTracker(tracker: Tracker)
+    func appendTracker(tracker: Tracker, category: String?)
     func reload()
     func showFirstStubScreen()
 }
@@ -18,6 +18,7 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
+    private var selectedCategory: String?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
     
@@ -232,7 +233,7 @@ final class HabitViewController: UIViewController {
         }
         
         let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays)
-        trackersViewController?.appendTracker(tracker: newTracker)
+        trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -255,7 +256,10 @@ extension HabitViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let addCategoryViewController = HabitCategoryViewController()
+            let addCategoryViewController = CategoryViewController()
+            addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
+                self?.selectedCategory = categoryName
+            }
             present(addCategoryViewController, animated: true, completion: nil)
         } else if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()

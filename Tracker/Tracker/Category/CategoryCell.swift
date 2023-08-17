@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HabitCategoryCell: UITableViewCell {
+final class CategoryCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
