@@ -24,6 +24,10 @@
 		645482F02A8AAFFC007F5BF3 /* HabitCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482EF2A8AAFFC007F5BF3 /* HabitCategoryViewController.swift */; };
 		645482F22A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F12A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift */; };
 		645482F42A8AB046007F5BF3 /* HabitCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F32A8AB046007F5BF3 /* HabitCategoryCell.swift */; };
+		645482F72A8D880D007F5BF3 /* EventCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F62A8D880D007F5BF3 /* EventCategoryViewController.swift */; };
+		645482F92A8D8829007F5BF3 /* CreateEventCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482F82A8D8829007F5BF3 /* CreateEventCategoryViewController.swift */; };
+		645482FB2A8D883E007F5BF3 /* EventCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482FA2A8D883E007F5BF3 /* EventCategoryCell.swift */; };
+		645482FD2A8E4EC3007F5BF3 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645482FC2A8E4EC3007F5BF3 /* OnboardingViewController.swift */; };
 		6460DF562A408EB3004A31C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF552A408EB3004A31C6 /* AppDelegate.swift */; };
 		6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF572A408EB3004A31C6 /* SceneDelegate.swift */; };
 		6460DF5A2A408EB3004A31C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6460DF592A408EB3004A31C6 /* ViewController.swift */; };
@@ -63,6 +67,10 @@
 		645482EF2A8AAFFC007F5BF3 /* HabitCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCategoryViewController.swift; sourceTree = "<group>"; };
 		645482F12A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateHabitCategoryViewController.swift; sourceTree = "<group>"; };
 		645482F32A8AB046007F5BF3 /* HabitCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCategoryCell.swift; sourceTree = "<group>"; };
+		645482F62A8D880D007F5BF3 /* EventCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCategoryViewController.swift; sourceTree = "<group>"; };
+		645482F82A8D8829007F5BF3 /* CreateEventCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventCategoryViewController.swift; sourceTree = "<group>"; };
+		645482FA2A8D883E007F5BF3 /* EventCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCategoryCell.swift; sourceTree = "<group>"; };
+		645482FC2A8E4EC3007F5BF3 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6460DF522A408EB3004A31C6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6460DF552A408EB3004A31C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6460DF572A408EB3004A31C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -132,6 +140,7 @@
 				6406E9CD2A825B06003DFB6B /* EventEmojiHeader.swift */,
 				6406E9C52A8259FA003DFB6B /* EventColorCell.swift */,
 				6406E9CF2A825B17003DFB6B /* EventColorHeader.swift */,
+				645482F52A8D87DE007F5BF3 /* Event Category */,
 			);
 			path = "Irregular Event";
 			sourceTree = "<group>";
@@ -174,6 +183,24 @@
 			path = "Habit Category";
 			sourceTree = "<group>";
 		};
+		645482F52A8D87DE007F5BF3 /* Event Category */ = {
+			isa = PBXGroup;
+			children = (
+				645482F62A8D880D007F5BF3 /* EventCategoryViewController.swift */,
+				645482F82A8D8829007F5BF3 /* CreateEventCategoryViewController.swift */,
+				645482FA2A8D883E007F5BF3 /* EventCategoryCell.swift */,
+			);
+			path = "Event Category";
+			sourceTree = "<group>";
+		};
+		645483022A8E4FEC007F5BF3 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				645482FC2A8E4EC3007F5BF3 /* OnboardingViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		6460DF492A408EB3004A31C6 = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +222,7 @@
 			children = (
 				6460DF592A408EB3004A31C6 /* ViewController.swift */,
 				647575612A5899CF00C57C04 /* TabBarController.swift */,
+				645483022A8E4FEC007F5BF3 /* Onboarding */,
 				3411ADE12A86CD7D006D21C9 /* Domain */,
 				647575682A58A1FF00C57C04 /* Tracker */,
 				647575672A58A1F000C57C04 /* Statistic */,
@@ -329,6 +357,8 @@
 				6406E9D02A825B17003DFB6B /* EventColorHeader.swift in Sources */,
 				647575762A6EB6B500C57C04 /* HabitViewController.swift in Sources */,
 				645482F22A8AB02B007F5BF3 /* CreateHabitCategoryViewController.swift in Sources */,
+				645482F92A8D8829007F5BF3 /* CreateEventCategoryViewController.swift in Sources */,
+				645482FB2A8D883E007F5BF3 /* EventCategoryCell.swift in Sources */,
 				645482F02A8AAFFC007F5BF3 /* HabitCategoryViewController.swift in Sources */,
 				6406E9C42A8259E8003DFB6B /* EventEmojiCell.swift in Sources */,
 				6406E9CE2A825B06003DFB6B /* EventEmojiHeader.swift in Sources */,
@@ -337,6 +367,8 @@
 				647575622A5899CF00C57C04 /* TabBarController.swift in Sources */,
 				6475757E2A6FD74200C57C04 /* IrregularEventViewController.swift in Sources */,
 				647575642A589BF000C57C04 /* TrackersViewController.swift in Sources */,
+				645482FD2A8E4EC3007F5BF3 /* OnboardingViewController.swift in Sources */,
+				645482F72A8D880D007F5BF3 /* EventCategoryViewController.swift in Sources */,
 				6460DF582A408EB3004A31C6 /* SceneDelegate.swift in Sources */,
 				6406E9CA2A825ADC003DFB6B /* HabitEmojiHeader.swift in Sources */,
 				647575662A589C2300C57C04 /* StatisticViewController.swift in Sources */,

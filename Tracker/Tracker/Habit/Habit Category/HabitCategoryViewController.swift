@@ -139,6 +139,7 @@ extension HabitCategoryViewController: UITableViewDelegate {
         }
 
         if let cell = tableView.cellForRow(at: indexPath) as? HabitCategoryCell {
+            // сделать обновление image через функцию и вернуть private для doneImage
             cell.doneImage.image = UIImage(named: "Done")
             tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -163,7 +164,6 @@ extension HabitCategoryViewController: UITableViewDelegate {
             cell.addSubview(separatorView)
         }
     }
-    
 }
 
 // MARK: - UITableViewDataSource

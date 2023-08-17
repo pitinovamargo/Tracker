@@ -18,7 +18,6 @@ final class HabitCategoryCell: UITableViewCell {
     
     let doneImage: UIImageView = {
         let doneImage = UIImageView()
-//        doneImage.image = UIImage(named: "Done")
         doneImage.translatesAutoresizingMaskIntoConstraints = false
         return doneImage
     }()
