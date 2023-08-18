@@ -17,7 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: scene)
         
-        if trackerCategoryStore.trackerCategories.isEmpty {
+        let defaults = UserDefaults.standard
+        let isFirstLaunch = !defaults.bool(forKey: "HasLaunchedBefore")
+        
+        if isFirstLaunch {
+            defaults.set(true, forKey: "HasLaunchedBefore")
+            window?.rootViewController = OnboardingViewController()
+        } else if trackerCategoryStore.trackerCategories.isEmpty {
             window?.rootViewController = OnboardingViewController()
         } else {
             window?.rootViewController = TabBarController()
