@@ -99,7 +99,6 @@ final class CreateCategoryViewController: UIViewController {
         view.addSubview(doneButton)
     }
     
-    
     @objc private func doneButtonTapped() {
         guard let category = addCategoryName.text, !category.isEmpty else {
             return
