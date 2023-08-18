@@ -11,6 +11,7 @@ final class IrregularEventViewController: UIViewController {
     
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
     var trackersViewController: TrackersActions?
+    private let addCategoryViewController = CategoryViewController()
     
     private var selectedCategory: String?
     private var selectedColor: UIColor?
@@ -224,7 +225,8 @@ final class IrregularEventViewController: UIViewController {
             return
         }
         let newEvent = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: WeekDay.allCases)
-        trackersViewController?.appendTracker(tracker: newEvent, category: "")
+        trackersViewController?.appendTracker(tracker: newEvent, category: self.selectedCategory)
+        addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newEvent)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }

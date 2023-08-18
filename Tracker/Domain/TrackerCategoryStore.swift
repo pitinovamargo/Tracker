@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol TrackerCategoryStoreDelegate: AnyObject {
-    func store() -> Void
+    func storeCategory() -> Void
 }
 
 final class TrackerCategoryStore: NSObject {
@@ -93,6 +93,6 @@ final class TrackerCategoryStore: NSObject {
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.store()
+        delegate?.storeCategory()
     }
 }

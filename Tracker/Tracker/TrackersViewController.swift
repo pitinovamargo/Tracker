@@ -11,6 +11,7 @@ final class TrackersViewController: UIViewController {
     
     private var trackerStore = TrackerStore()
     private var trackerRecordStore = TrackerRecordStore()
+    private(set) var categoryViewModel: CategoryViewModel = CategoryViewModel.shared
     
     private var trackers: [Tracker] = []
     private var categories: [TrackerCategory] = []
@@ -101,9 +102,8 @@ final class TrackersViewController: UIViewController {
         trackerRecordStore.delegate = self
         trackers = trackerStore.trackers
         completedTrackers = trackerRecordStore.trackerRecords
+        categories = categoryViewModel.categories
         
-        let category = TrackerCategory(header: "Домашние дела", trackers: trackers) // тестовая категория для отображения
-        categories.append(category)
         filterVisibleCategories()
         showFirstStubScreen()
         
