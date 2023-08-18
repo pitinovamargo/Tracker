@@ -16,7 +16,7 @@ final class CategoryCell: UITableViewCell {
         return label
     }()
     
-    let doneImage: UIImageView = {
+    private let doneImage: UIImageView = {
         let doneImage = UIImageView()
         doneImage.translatesAutoresizingMaskIntoConstraints = false
         return doneImage

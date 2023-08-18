@@ -21,8 +21,9 @@ final class HabitViewController: UIViewController {
     private var selectedCategory: String?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
-    
     private var selectedDays: [WeekDay] = []
+    private let addCategoryViewController = CategoryViewController()
+    
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -234,6 +235,7 @@ final class HabitViewController: UIViewController {
         
         let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory)
+        addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -244,6 +246,7 @@ extension HabitViewController: SelectedDays {
     func save(indicies: [Int]) {
         for index in indicies {
             self.selectedDays.append(WeekDay.allCases[index])
+            self.trackersTableView.reloadData()
         }
     }
 }
@@ -256,15 +259,16 @@ extension HabitViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let addCategoryViewController = CategoryViewController()
             addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
-                self?.selectedCategory = categoryName
+                self?.selectedCategory = categoryName?.header
+                self?.trackersTableView.reloadData()
             }
             present(addCategoryViewController, animated: true, completion: nil)
         } else if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.createTrackerViewController = self
             present(scheduleViewController, animated: true, completion: nil)
+            selectedDays = []
         }
         trackersTableView.deselectRow(at: indexPath, animated: true)
     }
@@ -294,11 +298,31 @@ extension HabitViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? HabitViewCell else { return UITableViewCell() }
+        
         if indexPath.row == 0 {
-            cell.update(with: "Категория")
+            var title = "Категория"
+            if let selectedCategory = selectedCategory {
+                title += "\n" + selectedCategory
+            }
+            cell.update(with: title)
         } else if indexPath.row == 1 {
-            cell.update(with: "Расписание")
+            var subtitle = ""
+            
+            if !selectedDays.isEmpty {
+                if selectedDays.count == 7 {
+                    subtitle = "Каждый день"
+                } else {
+                    subtitle = selectedDays.map { $0.shortName }.joined(separator: ", ")
+                }
+            }
+            
+            if !subtitle.isEmpty {
+                cell.update(with: "Расписание\n" + subtitle)
+            } else {
+                cell.update(with: "Расписание")
+            }
         }
+        
         return cell
     }
 }

@@ -12,6 +12,7 @@ final class IrregularEventViewController: UIViewController {
     let irregularEventCellReuseIdentifier = "IrregularEventTableViewCell"
     var trackersViewController: TrackersActions?
     
+    private var selectedCategory: String?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
     
@@ -134,11 +135,11 @@ final class IrregularEventViewController: UIViewController {
         setupEmojiCollectionView()
         setupColorCollectionView()
     }
-
+    
     private func setupEventNameTextField() {
         addEventName.delegate = self
     }
-
+    
     private func setupIrregularEventTableView() {
         irregularEventTableView.delegate = self
         irregularEventTableView.dataSource = self
@@ -146,13 +147,13 @@ final class IrregularEventViewController: UIViewController {
         irregularEventTableView.layer.cornerRadius = 16
         irregularEventTableView.separatorStyle = .none
     }
-
+    
     private func setupEmojiCollectionView() {
         emojiCollectionView.dataSource = self
         emojiCollectionView.delegate = self
         emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
     }
-
+    
     private func setupColorCollectionView() {
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
@@ -236,7 +237,13 @@ extension IrregularEventViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let addCategoryViewController = CategoryViewController()
+        addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
+            self?.selectedCategory = categoryName?.header
+            self?.irregularEventTableView.reloadData()
+        }
         irregularEventTableView.deselectRow(at: indexPath, animated: true)
+        present(addCategoryViewController, animated: true, completion: nil)
     }
 }
 
@@ -248,8 +255,12 @@ extension IrregularEventViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: irregularEventCellReuseIdentifier, for: indexPath) as! IrregularEventCell
-        cell.titleLabel.text = "Категория"
-        return cell
+            var title = "Категория"
+            if let selectedCategory = selectedCategory {
+                title += "\n" + selectedCategory
+            }
+            cell.update(with: title)
+            return cell
     }
 }
 

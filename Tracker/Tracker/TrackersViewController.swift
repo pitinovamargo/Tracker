@@ -219,10 +219,10 @@ extension TrackersViewController: TrackersActions {
     func appendTracker(tracker: Tracker, category: String?) {
         guard let category = category else { return }
         try! self.trackerStore.addNewTracker(tracker)
-        var foundCategory = self.categories.first { ctgry in
+        let foundCategory = self.categories.first { ctgry in
             ctgry.header == category
         }
-        if let found = foundCategory {
+        if foundCategory != nil {
             self.categories = self.categories.map { ctgry in
                 if (ctgry.header == category) {
                     var updatedTrackers = ctgry.trackers

@@ -104,6 +104,11 @@ final class CategoryViewController: UIViewController {
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.register(CategoryCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        if !viewModel.categories.isEmpty {
+            categoriesTableView.isHidden = false
+            emptyCategoryLogo.isHidden = true
+            emptyCategoryText.isHidden = true
+        }
     }
     
     @objc private func addCategoryTapped() {
@@ -137,15 +142,14 @@ extension CategoryViewController: UITableViewDelegate {
         guard indexPath.row < viewModel.categories.count else {
             return
         }
-
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryCell {
-            // сделать обновление image через функцию и вернуть private для doneImage
-            cell.doneImage.image = UIImage(named: "Done")
+            cell.done(with: UIImage(named: "Done") ?? UIImage())
             viewModel.selectCategory(indexPath.row)
             tableView.deselectRow(at: indexPath, animated: true)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -177,8 +181,13 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
         if indexPath.row < viewModel.categories.count {
-            let categoryName = viewModel.categories[indexPath.row]
-            cell.update(with: categoryName)
+            let category = viewModel.categories[indexPath.row]
+            cell.update(with: category.header)
+            if let selected = viewModel.selectedCategory {
+                if selected.header == category.header {
+                    cell.done(with: UIImage(named: "Done") ?? UIImage())
+                }
+            }
             
             let isLastCell = indexPath.row == viewModel.categories.count - 1
             if isLastCell {

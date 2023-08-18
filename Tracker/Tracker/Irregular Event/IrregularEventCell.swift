@@ -46,4 +46,20 @@ final class IrregularEventCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func update(with title: String) {
+        let attributedText = NSMutableAttributedString(string: title)
+        
+        if let rangeOfNewLine = title.range(of: "\n") {
+            let rangeOfFirstLine = NSRange(title.startIndex..<rangeOfNewLine.lowerBound, in: title)
+            let rangeOfSecondLine = NSRange(rangeOfNewLine.upperBound..<title.endIndex, in: title)
+            
+            attributedText.addAttribute(.foregroundColor, value: UIColor.ypBlackDay, range: rangeOfFirstLine)
+            attributedText.addAttribute(.foregroundColor, value: UIColor.ypGray, range: rangeOfSecondLine)
+        } else {
+            attributedText.addAttribute(.foregroundColor, value: UIColor.ypBlackDay, range: NSRange(title.startIndex..<title.endIndex, in: title))
+        }
+        
+        titleLabel.attributedText = attributedText
+    }
 }
