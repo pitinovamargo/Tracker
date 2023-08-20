@@ -16,7 +16,7 @@ final class TrackersViewController: UIViewController {
     private var trackers: [Tracker] = []
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private (set) var completedTrackers: [TrackerRecord] = []
     
     private var selectedDate: Int?
     private var filterText: String?

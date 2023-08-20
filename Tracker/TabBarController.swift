@@ -12,7 +12,8 @@ final class TabBarController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
                 
-        let trackersViewController = UINavigationController(rootViewController: TrackersViewController())
+        let trackersVC = TrackersViewController()
+        let trackersViewController = UINavigationController(rootViewController: trackersVC)
         trackersViewController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("app.title", comment: ""),
             image: UIImage(named: "Trackers"),
@@ -20,6 +21,7 @@ final class TabBarController: UITabBarController {
         )
         
         let statisticViewController = StatisticViewController()
+        statisticViewController.trackersViewController = trackersVC
         statisticViewController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("statistic.title", comment: ""),
             image: UIImage(named: "Stats"),

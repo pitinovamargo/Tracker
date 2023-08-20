@@ -10,6 +10,7 @@ import UIKit
 final class StatisticViewController: UIViewController {
     
     let cellReuseIdentifier = "StatisticViewController"
+    var trackersViewController: TrackersViewController?
     
     private let header: UILabel = {
         let header = UILabel()
@@ -52,7 +53,8 @@ final class StatisticViewController: UIViewController {
         statisticTableView.delegate = self
         statisticTableView.dataSource = self
         statisticTableView.register(StatisticCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        
+        statisticTableView.reloadData()
+                
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
             header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -67,6 +69,12 @@ final class StatisticViewController: UIViewController {
             statisticTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             statisticTableView.heightAnchor.constraint(equalToConstant: 500)
         ])
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("APPEAR")
+        statisticTableView.reloadData()
     }
     
     private func addSubviews() {
@@ -116,22 +124,20 @@ extension StatisticViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            count = "6"
-        case 1:
-            count = "2"
-        case 2:
-            count = "5"
-        case 3:
-            count = "4"
-        default:
             count = "0"
+        case 1:
+            count = "0"
+        case 2:
+            count = "\(trackersViewController?.completedTrackers.count ?? 0)"
+        case 3:
+            count = "0"
+        default:
             break
         }
         
         cell.update(with: title, count: count)
-        
-        cell.layer.cornerRadius = 16
-        cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+        cell.selectionStyle = .none
+        cell.isUserInteractionEnabled = false
         
         return cell
     }
