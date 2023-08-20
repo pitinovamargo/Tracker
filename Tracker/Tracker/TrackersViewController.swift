@@ -90,6 +90,16 @@ final class TrackersViewController: UIViewController {
         return addTrackerButton
     }()
     
+    private lazy var filtersButton: UIButton = {
+        let filtersButton = UIButton()
+        filtersButton.layer.cornerRadius = 16
+        filtersButton.backgroundColor = .ypBlue
+        filtersButton.setTitle("Фильтры", for: .normal)
+        filtersButton.translatesAutoresizingMaskIntoConstraints = false
+        filtersButton.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
+        return filtersButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         selectCurrentDay()
@@ -136,7 +146,11 @@ final class TrackersViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: searchTrackers.bottomAnchor, constant: 24),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            filtersButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 130),
+            filtersButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -130),
+            filtersButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -150,6 +164,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(emptySearch)
         view.addSubview(emptySearchText)
         view.addSubview(collectionView)
+        view.addSubview(filtersButton)
     }
     
     @objc private func didTapAddTracker() {
@@ -161,6 +176,11 @@ final class TrackersViewController: UIViewController {
     @objc private func pickerChanged() {
         selectCurrentDay()
         filterTrackers()
+    }
+    
+    @objc private func filtersButtonTapped() {
+        let filtersViewController = FiltersViewController()
+        present(filtersViewController, animated: true, completion: nil)
     }
     
     private func selectCurrentDay() {

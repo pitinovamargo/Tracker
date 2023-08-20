@@ -22,7 +22,8 @@ final class HabitViewController: UIViewController {
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
     private var selectedDays: [WeekDay] = []
-    private let addCategoryViewController = CategoryViewController()
+    private(set) var viewModel: CategoryViewModel = CategoryViewModel.shared
+
     
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
@@ -235,7 +236,7 @@ final class HabitViewController: UIViewController {
         
         let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays)
         trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory)
-        addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
+        viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -259,6 +260,7 @@ extension HabitViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
+            let addCategoryViewController = CategoryViewController()
             addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
                 self?.selectedCategory = categoryName?.header
                 self?.trackersTableView.reloadData()
