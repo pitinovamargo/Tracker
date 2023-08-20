@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TrackersActions {
-    func appendTracker(tracker: Tracker)
+    func appendTracker(tracker: Tracker, category: String?)
     func reload()
     func showFirstStubScreen()
 }
@@ -18,10 +18,12 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
+    private var selectedCategory: String?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
-    
     private var selectedDays: [WeekDay] = []
+    private let addCategoryViewController = CategoryViewController()
+    
     private let colors: [UIColor] = [
         .ypColorSelection1, .ypColorSelection2, .ypColorSelection3,
         .ypColorSelection4, .ypColorSelection5, .ypColorSelection6,
@@ -194,7 +196,7 @@ final class HabitViewController: UIViewController {
             trackersTableView.topAnchor.constraint(equalTo: addTrackerName.bottomAnchor, constant: 24),
             trackersTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             trackersTableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-            trackersTableView.heightAnchor.constraint(equalToConstant: 149),
+            trackersTableView.heightAnchor.constraint(equalToConstant: 150),
             emojiCollectionView.topAnchor.constraint(equalTo: trackersTableView.bottomAnchor, constant: 32),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 222),
             emojiCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 18),
@@ -232,7 +234,8 @@ final class HabitViewController: UIViewController {
         }
         
         let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays)
-        trackersViewController?.appendTracker(tracker: newTracker)
+        trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory)
+        addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -243,6 +246,7 @@ extension HabitViewController: SelectedDays {
     func save(indicies: [Int]) {
         for index in indicies {
             self.selectedDays.append(WeekDay.allCases[index])
+            self.trackersTableView.reloadData()
         }
     }
 }
@@ -254,10 +258,17 @@ extension HabitViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
+            addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
+                self?.selectedCategory = categoryName?.header
+                self?.trackersTableView.reloadData()
+            }
+            present(addCategoryViewController, animated: true, completion: nil)
+        } else if indexPath.row == 1 {
             let scheduleViewController = ScheduleViewController()
             scheduleViewController.createTrackerViewController = self
             present(scheduleViewController, animated: true, completion: nil)
+            selectedDays = []
         }
         trackersTableView.deselectRow(at: indexPath, animated: true)
     }
@@ -268,9 +279,14 @@ extension HabitViewController: UITableViewDelegate {
         let separatorHeight: CGFloat = 1.0
         let separatorX = separatorInset
         let separatorY = cell.frame.height - separatorHeight
-        let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
-        separatorView.backgroundColor = .ypGray
-        cell.addSubview(separatorView)
+        
+        let isLastCell = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+        
+        if !isLastCell {
+            let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
+            separatorView.backgroundColor = .ypGray
+            cell.addSubview(separatorView)
+        }
     }
 }
 
@@ -282,11 +298,31 @@ extension HabitViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? HabitViewCell else { return UITableViewCell() }
+        
         if indexPath.row == 0 {
-            cell.update(with: "Категория")
+            var title = "Категория"
+            if let selectedCategory = selectedCategory {
+                title += "\n" + selectedCategory
+            }
+            cell.update(with: title)
         } else if indexPath.row == 1 {
-            cell.update(with: "Расписание")
+            var subtitle = ""
+            
+            if !selectedDays.isEmpty {
+                if selectedDays.count == 7 {
+                    subtitle = "Каждый день"
+                } else {
+                    subtitle = selectedDays.map { $0.shortName }.joined(separator: ", ")
+                }
+            }
+            
+            if !subtitle.isEmpty {
+                cell.update(with: "Расписание\n" + subtitle)
+            } else {
+                cell.update(with: "Расписание")
+            }
         }
+        
         return cell
     }
 }

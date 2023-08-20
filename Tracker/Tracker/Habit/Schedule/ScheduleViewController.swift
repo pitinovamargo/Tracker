@@ -65,7 +65,7 @@ final class ScheduleViewController: UIViewController {
             scheduleTableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 30),
             scheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scheduleTableView.heightAnchor.constraint(equalToConstant: 524),
+            scheduleTableView.heightAnchor.constraint(equalToConstant: 525),
             doneScheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             doneScheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             doneScheduleButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
@@ -107,10 +107,13 @@ extension ScheduleViewController: UITableViewDelegate {
         let separatorX = separatorInset
         let separatorY = cell.frame.height - separatorHeight
         
-        let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
-        separatorView.backgroundColor = .ypGray
+        let isLastCell = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
         
-        cell.addSubview(separatorView)
+        if !isLastCell {
+            let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
+            separatorView.backgroundColor = .ypGray
+            cell.addSubview(separatorView)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -159,6 +162,25 @@ enum WeekDay: Int, CaseIterable {
             return "Суббота"
         case .sunday:
             return "Воскресенье"
+        }
+    }
+    
+    var shortName: String {
+        switch self {
+        case .monday:
+            return "Пн"
+        case .tuesday:
+            return "Вт"
+        case .wednesday:
+            return "Ср"
+        case .thursday:
+            return "Чт"
+        case .friday:
+            return "Пт"
+        case .saturday:
+            return "Сб"
+        case .sunday:
+            return "Вс"
         }
     }
 }

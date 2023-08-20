@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StatisticViewController: ViewController {
+final class StatisticViewController: UIViewController {
     
 }
 

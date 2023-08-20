@@ -11,6 +11,7 @@ final class TrackersViewController: UIViewController {
     
     private var trackerStore = TrackerStore()
     private var trackerRecordStore = TrackerRecordStore()
+    private(set) var categoryViewModel: CategoryViewModel = CategoryViewModel.shared
     
     private var trackers: [Tracker] = []
     private var categories: [TrackerCategory] = []
@@ -101,9 +102,8 @@ final class TrackersViewController: UIViewController {
         trackerRecordStore.delegate = self
         trackers = trackerStore.trackers
         completedTrackers = trackerRecordStore.trackerRecords
+        categories = categoryViewModel.categories
         
-        let category = TrackerCategory(header: "Домашние дела", trackers: trackers) // тестовая категория для отображения
-        categories.append(category)
         filterVisibleCategories()
         showFirstStubScreen()
         
@@ -174,6 +174,7 @@ final class TrackersViewController: UIViewController {
         showSecondStubScreen()
         collectionView.reloadData()
     }
+    
     private func filterVisibleCategories() {
         visibleCategories = categories.map { category in
             TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
@@ -193,6 +194,7 @@ final class TrackersViewController: UIViewController {
     }
 }
 
+// MARK: - TrackerStoreDelegate
 extension TrackersViewController: TrackerStoreDelegate {
     func store() {
         trackers = trackerStore.trackers
@@ -214,12 +216,24 @@ extension TrackersViewController: UITextFieldDelegate {
 
 // MARK: - TrackersActions
 extension TrackersViewController: TrackersActions {
-    func appendTracker(tracker: Tracker) {
+    func appendTracker(tracker: Tracker, category: String?) {
+        guard let category = category else { return }
         try! self.trackerStore.addNewTracker(tracker)
-        self.categories = self.categories.map { category in
-            var updatedTrackers = category.trackers
-            updatedTrackers.append(tracker)
-            return TrackerCategory(header: category.header, trackers: updatedTrackers)
+        let foundCategory = self.categories.first { ctgry in
+            ctgry.header == category
+        }
+        if foundCategory != nil {
+            self.categories = self.categories.map { ctgry in
+                if (ctgry.header == category) {
+                    var updatedTrackers = ctgry.trackers
+                    updatedTrackers.append(tracker)
+                    return TrackerCategory(header: ctgry.header, trackers: updatedTrackers)
+                } else {
+                    return TrackerCategory(header: ctgry.header, trackers: ctgry.trackers)
+                }
+            }
+        } else {
+            self.categories.append(TrackerCategory(header: category, trackers: [tracker]))
         }
         filterTrackers()
     }
