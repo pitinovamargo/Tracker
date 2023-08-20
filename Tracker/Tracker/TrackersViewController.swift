@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController {
     private let header: UILabel = {
         let header = UILabel()
         header.translatesAutoresizingMaskIntoConstraints = false
-        header.text = "Трекеры"
+        header.text = NSLocalizedString("app.title", comment: "")
         header.textColor = .ypBlackDay
         header.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         return header
@@ -94,7 +94,7 @@ final class TrackersViewController: UIViewController {
         let filtersButton = UIButton()
         filtersButton.layer.cornerRadius = 16
         filtersButton.backgroundColor = .ypBlue
-        filtersButton.setTitle("Фильтры", for: .normal)
+        filtersButton.setTitle(NSLocalizedString("filter.title", comment: ""), for: .normal)
         filtersButton.translatesAutoresizingMaskIntoConstraints = false
         filtersButton.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
         return filtersButton

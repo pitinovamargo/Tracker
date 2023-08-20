@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Margarita Pitinova on 20.08.2023.
+  
+*/
+
+app.title = "Трекеры";
+filter.title = "Фильтры";
+statistic.title = "Статистика";

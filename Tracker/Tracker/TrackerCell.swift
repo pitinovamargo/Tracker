@@ -103,7 +103,7 @@ final class TrackerCell: UICollectionViewCell {
         self.trackerCard.backgroundColor = tracker.color
         trackerDescription.text = tracker.title
         trackerEmoji.text = tracker.emoji
-        trackersDaysAmount.text = formatCompletedDays(completedDays)
+        trackersDaysAmount.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), completedDays)
         
         let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
         completedTrackerButton.setImage(image, for: .normal)
@@ -116,23 +116,6 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(emojiBackground)
         contentView.addSubview(trackerEmoji)
         contentView.addSubview(trackerDescription)
-    }
-    
-    private func formatCompletedDays(_ completedDays: Int) -> String {
-        let lastDigit = completedDays % 10
-        let lastTwoDigits = completedDays % 100
-        if lastTwoDigits >= 11 && lastTwoDigits <= 19 {
-            return "\(completedDays) дней"
-        }
-        
-        switch lastDigit {
-        case 1:
-            return "\(completedDays) день"
-        case 2, 3, 4:
-            return "\(completedDays) дня"
-        default:
-            return "\(completedDays) дней"
-        }
     }
     
     @objc private func completedTracker() {
