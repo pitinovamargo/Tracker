@@ -73,7 +73,6 @@ final class StatisticViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("APPEAR")
         statisticTableView.reloadData()
     }
     
