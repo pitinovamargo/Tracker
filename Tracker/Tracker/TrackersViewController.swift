@@ -368,3 +368,28 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: collectionView.bounds.width, height: 47)
     }
 }
+
+extension TrackersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            
+            let pinAction = UIAction(title: "Закрепить", handler: { _ in
+                // Handle action
+            })
+            
+            let editAction = UIAction(title: "Редактировать", handler: { _ in
+                // Handle action
+            })
+            
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { _ in
+                // Handle delete action
+            }
+            
+            let actions = [pinAction, editAction, deleteAction]
+            
+            return UIMenu(title: "", children: actions)
+        }
+        
+        return configuration
+    }
+}
