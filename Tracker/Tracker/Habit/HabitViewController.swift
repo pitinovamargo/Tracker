@@ -18,7 +18,7 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
-    private var selectedCategory: String?
+    private var selectedCategory: TrackerCategory?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
     private var selectedDays: [WeekDay] = []
@@ -235,7 +235,7 @@ final class HabitViewController: UIViewController {
         }
         
         let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays, pinned: false)
-        trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory)
+        trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory?.header)
         viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -261,8 +261,8 @@ extension HabitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             let addCategoryViewController = CategoryViewController()
-            addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
-                self?.selectedCategory = categoryName?.header
+            addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] category in
+                self?.selectedCategory = category
                 self?.trackersTableView.reloadData()
             }
             present(addCategoryViewController, animated: true, completion: nil)
@@ -303,7 +303,7 @@ extension HabitViewController: UITableViewDataSource {
         
         if indexPath.row == 0 {
             var title = "Категория"
-            if let selectedCategory = selectedCategory {
+            if let selectedCategory = selectedCategory?.header {
                 title += "\n" + selectedCategory
             }
             cell.update(with: title)

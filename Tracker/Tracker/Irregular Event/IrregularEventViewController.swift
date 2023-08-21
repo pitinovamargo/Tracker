@@ -13,7 +13,7 @@ final class IrregularEventViewController: UIViewController {
     var trackersViewController: TrackersActions?
     private let addCategoryViewController = CategoryViewController()
     
-    private var selectedCategory: String?
+    private var selectedCategory: TrackerCategory?
     private var selectedColor: UIColor?
     private var selectedEmoji: String?
     
@@ -225,7 +225,7 @@ final class IrregularEventViewController: UIViewController {
             return
         }
         let newEvent = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: WeekDay.allCases, pinned: false)
-        trackersViewController?.appendTracker(tracker: newEvent, category: self.selectedCategory)
+        trackersViewController?.appendTracker(tracker: newEvent, category: self.selectedCategory?.header)
         addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newEvent)
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -240,8 +240,8 @@ extension IrregularEventViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let addCategoryViewController = CategoryViewController()
-        addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] categoryName in
-            self?.selectedCategory = categoryName?.header
+        addCategoryViewController.viewModel.$selectedCategory.bind { [weak self] category in
+            self?.selectedCategory = category
             self?.irregularEventTableView.reloadData()
         }
         irregularEventTableView.deselectRow(at: indexPath, animated: true)
@@ -258,7 +258,7 @@ extension IrregularEventViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: irregularEventCellReuseIdentifier, for: indexPath) as! IrregularEventCell
             var title = "Категория"
-            if let selectedCategory = selectedCategory {
+        if let selectedCategory = selectedCategory?.header {
                 title += "\n" + selectedCategory
             }
             cell.update(with: title)
