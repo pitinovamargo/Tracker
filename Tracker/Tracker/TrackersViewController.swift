@@ -105,7 +105,7 @@ final class TrackersViewController: UIViewController {
         pinnedTrackers = trackerStore.trackers.filter { $0.pinned }
         completedTrackers = trackerRecordStore.trackerRecords
         categories = categoryViewModel.categories
-        categories.insert(TrackerCategory(header: "Pinned", trackers: pinnedTrackers), at: 0)
+        categories.insert(TrackerCategory(header: "Закрепленные", trackers: pinnedTrackers), at: 0)
         
         filterVisibleCategories()
         showFirstStubScreen()
@@ -180,12 +180,13 @@ final class TrackersViewController: UIViewController {
     
     private func filterVisibleCategories() {
         visibleCategories = categories.map { category in
-            if category.header == "Pinned" {
+            if category.header == "Закрепленные" {
                 return TrackerCategory(header: category.header, trackers: pinnedTrackers.filter { tracker in
                     return tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
                 })
             } else {
                 return TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
+                    let trackersContains = trackers.contains { $0.id == tracker.id }
                     let pinnedContains = pinnedTrackers.contains{ $0.id == tracker.id }
                     let scheduleContains = tracker.schedule?.contains { day in
                         guard let currentDay = self.selectedDate else {
@@ -194,7 +195,7 @@ final class TrackersViewController: UIViewController {
                         return day.rawValue == currentDay
                     } ?? false
                     let titleContains = tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
-                    return scheduleContains && titleContains && !pinnedContains
+                    return scheduleContains && titleContains && trackersContains && !pinnedContains
                 })
             }
         }
@@ -401,8 +402,21 @@ extension TrackersViewController: UICollectionViewDelegate {
                 // Handle action
             })
             
-            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { _ in
-                try! self?.trackerStore.deleteTracker(tracker)
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                guard let self = self else { return }
+                
+                let alertController = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
+                let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+                    try! self.trackerStore.deleteTracker(tracker)
+                    self.showFirstStubScreen()
+                }
+                alertController.addAction(deleteConfirmationAction)
+                
+                let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+                
             }
             
             let actions = [pinAction, editAction, deleteAction]
