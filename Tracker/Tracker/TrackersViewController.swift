@@ -185,8 +185,9 @@ final class TrackersViewController: UIViewController {
                     return tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
                 })
             } else {
-                return TrackerCategory(header: category.header, trackers: category.trackers.filter { tracker in
-                    let trackersContains = trackers.contains { $0.id == tracker.id }
+                return TrackerCategory(header: category.header, trackers: category.trackers.map { tracker in
+                    let fromTrackers = trackers.first { $0.id == tracker.id }
+                    guard let fromTrackers = fromTrackers else { return }
                     let pinnedContains = pinnedTrackers.contains{ $0.id == tracker.id }
                     let scheduleContains = tracker.schedule?.contains { day in
                         guard let currentDay = self.selectedDate else {
@@ -195,7 +196,9 @@ final class TrackersViewController: UIViewController {
                         return day.rawValue == currentDay
                     } ?? false
                     let titleContains = tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
-                    return scheduleContains && titleContains && trackersContains && !pinnedContains
+                    if scheduleContains && titleContains && !pinnedContains {
+                        return fromTrackers
+                    }
                 })
             }
         }
@@ -233,6 +236,28 @@ extension TrackersViewController: TrackersActions {
     func appendTracker(tracker: Tracker, category: String?) {
         guard let category = category else { return }
         try! self.trackerStore.addNewTracker(tracker)
+        let foundCategory = self.categories.first { ctgry in
+            ctgry.header == category
+        }
+        if foundCategory != nil {
+            self.categories = self.categories.map { ctgry in
+                if (ctgry.header == category) {
+                    var updatedTrackers = ctgry.trackers
+                    updatedTrackers.append(tracker)
+                    return TrackerCategory(header: ctgry.header, trackers: updatedTrackers)
+                } else {
+                    return TrackerCategory(header: ctgry.header, trackers: ctgry.trackers)
+                }
+            }
+        } else {
+            self.categories.append(TrackerCategory(header: category, trackers: [tracker]))
+        }
+        filterTrackers()
+    }
+    
+    func updateTracker(tracker: Tracker, oldTracker: Tracker?, category: String?) {
+        guard let category = category, let oldTracker = oldTracker else { return }
+        try! self.trackerStore.updateTracker(tracker, oldTracker: oldTracker)
         let foundCategory = self.categories.first { ctgry in
             ctgry.header == category
         }
@@ -399,6 +424,17 @@ extension TrackersViewController: UICollectionViewDelegate {
                 })
             }
             let editAction = UIAction(title: "Редактировать", handler: { [weak self] _ in
+                guard let self = self,
+                      let tracker = tracker
+                else { return }
+                let addHabit = HabitViewController()
+                addHabit.trackersViewController = self
+                addHabit.editTracker(tracker: tracker, category: self.categories.first {
+                    $0.trackers.contains {
+                        $0.id == tracker.id
+                    }
+                })
+                self.present(addHabit, animated: true)
                 // Handle action
             })
             

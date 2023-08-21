@@ -9,6 +9,7 @@ import UIKit
 
 protocol TrackersActions {
     func appendTracker(tracker: Tracker, category: String?)
+    func updateTracker(tracker: Tracker, oldTracker: Tracker?, category: String?)
     func reload()
     func showFirstStubScreen()
 }
@@ -18,8 +19,10 @@ final class HabitViewController: UIViewController {
     var trackersViewController: TrackersActions?
     let cellReuseIdentifier = "HabitViewController"
     
+    private var updatedTracker: Tracker?
     private var selectedCategory: TrackerCategory?
     private var selectedColor: UIColor?
+    private var selectedColorIndex: Int?
     private var selectedEmoji: String?
     private var selectedDays: [WeekDay] = []
     private(set) var viewModel: CategoryViewModel = CategoryViewModel.shared
@@ -230,15 +233,33 @@ final class HabitViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard let text = addTrackerName.text, !text.isEmpty,
               let color = selectedColor,
-              let emoji = selectedEmoji else {
+              let emoji = selectedEmoji,
+              let colorIndex = selectedColorIndex
+        else {
             return
         }
         
-        let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays, pinned: false)
-        trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory?.header)
-        viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
+        let newTracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: self.selectedDays, pinned: false, colorIndex: colorIndex)
+        if header.text == "Редактирование привычки" {
+            trackersViewController?.updateTracker(tracker: newTracker, oldTracker: updatedTracker, category: self.selectedCategory?.header)
+        } else {
+            trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory?.header)
+            viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
+        }
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func editTracker(tracker: Tracker, category: TrackerCategory?) {
+        header.text = "Редактирование привычки"
+        createButton.setTitle("Сохранить", for: .normal)
+        updatedTracker = tracker
+        addTrackerName.text = tracker.title
+        selectedCategory = category
+        selectedDays = tracker.schedule ?? []
+        selectedColor = tracker.color
+        selectedEmoji = tracker.emoji
+        selectedColorIndex = tracker.colorIndex
     }
 }
 
@@ -365,6 +386,12 @@ extension HabitViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = selectedEmoji
             cell.layer.cornerRadius = 16
             
+            if let passedEmoji = self.selectedEmoji {
+                if passedEmoji == selectedEmoji {
+                    cell.backgroundColor = .ypLightGray
+                }
+            }
+            
             return cell
         } else if collectionView == colorCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitColorCell", for: indexPath) as? HabitColorCell else {
@@ -376,6 +403,13 @@ extension HabitViewController: UICollectionViewDataSource {
             
             cell.colorView.backgroundColor = selectedColor
             cell.layer.cornerRadius = 8
+            
+            if let passedColorIndex = self.selectedColorIndex {
+                if passedColorIndex == colorIndex {
+                    cell.layer.borderWidth = 3
+                    cell.layer.borderColor = cell.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+                }
+            }
             
             return cell
         }
@@ -432,16 +466,23 @@ extension HabitViewController: UICollectionViewDelegateFlowLayout {
 extension HabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
+            collectionView.visibleCells.forEach {
+                $0.backgroundColor = .ypWhiteDay
+            }
             let cell = collectionView.cellForItem(at: indexPath) as? HabitEmojiCell
             cell?.backgroundColor = .ypLightGray
             
             selectedEmoji = cell?.emojiLabel.text
         } else if collectionView == colorCollectionView {
+            collectionView.visibleCells.forEach {
+                $0.layer.borderWidth = 0
+            }
             let cell = collectionView.cellForItem(at: indexPath) as? HabitColorCell
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = cell?.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
             
             selectedColor = cell?.colorView.backgroundColor
+            selectedColorIndex = indexPath.row
         }
     }
     
