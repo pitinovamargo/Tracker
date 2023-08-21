@@ -224,7 +224,7 @@ final class IrregularEventViewController: UIViewController {
               let emoji = selectedEmoji else {
             return
         }
-        let newEvent = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: WeekDay.allCases)
+        let newEvent = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: WeekDay.allCases, pinned: false)
         trackersViewController?.appendTracker(tracker: newEvent, category: self.selectedCategory)
         addCategoryViewController.viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newEvent)
         trackersViewController?.reload()

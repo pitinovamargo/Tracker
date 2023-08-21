@@ -72,7 +72,29 @@ final class TrackerStore: NSObject {
         else {
             fatalError()
         }
-        return Tracker(id: id, title: title, color: color, emoji: emoji, schedule: schedule.map({ WeekDay(rawValue: $0)!}))
+        return Tracker(id: id, title: title, color: color, emoji: emoji, schedule: schedule.map({ WeekDay(rawValue: $0)!}), pinned: trackerCoreData.pinned)
+    }
+    
+    func deleteTracker(_ tracker: Tracker?) throws {
+        let toDelete = try fetchTracker(with: tracker)
+        guard let toDelete = toDelete else { return }
+        context.delete(toDelete)
+        try context.save()
+    }
+    
+    func pinTracker(_ tracker: Tracker?, value: Bool) throws {
+        let toPin = try fetchTracker(with: tracker)
+        guard let toPin = toPin else { return }
+        toPin.pinned = value
+        try context.save()
+    }
+    
+    func fetchTracker(with tracker: Tracker?) throws -> TrackerCoreData? {
+        guard let tracker = tracker else { fatalError() }
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        let result = try context.fetch(fetchRequest)
+        return result.first
     }
 }
 
