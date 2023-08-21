@@ -136,6 +136,10 @@ extension CategoryViewController: CategoryActions {
         emptyCategoryText.isHidden = true
     }
     
+    func updateCategory(category:TrackerCategory?, header: String) {
+        viewModel.updateCategory(category: category, header: header)
+    }
+    
     func reload() {
         self.categoriesTableView.reloadData()
     }
@@ -184,7 +188,12 @@ extension CategoryViewController: UITableViewDelegate {
 
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let editAction = UIAction(title: "Редактировать") { [weak self] _ in
-                // Обработка нажатия на "Редактировать"
+                guard let self = self else { return }
+
+                let createCategoryViewController = CreateCategoryViewController()
+                createCategoryViewController.categoryViewController = self
+                createCategoryViewController.editCategory(category, newHeader: "Редактирование категории")
+                self.present(createCategoryViewController, animated: true, completion: nil)
             }
             
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in

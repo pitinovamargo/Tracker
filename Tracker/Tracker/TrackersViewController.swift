@@ -390,15 +390,15 @@ extension TrackersViewController: UICollectionViewDelegate {
             let tracker = self?.visibleCategories[indexPath.section].trackers[indexPath.row]
             var pinAction: UIAction
             if tracker?.pinned ?? false {
-                pinAction = UIAction(title: "Открепить", handler: { _ in
+                pinAction = UIAction(title: "Открепить", handler: { [weak self] _ in
                     try! self?.trackerStore.pinTracker(tracker, value: false)
                 })
             } else {
-                pinAction = UIAction(title: "Закрепить", handler: { _ in
+                pinAction = UIAction(title: "Закрепить", handler: { [weak self] _ in
                     try! self?.trackerStore.pinTracker(tracker, value: true)
                 })
             }
-            let editAction = UIAction(title: "Редактировать", handler: { _ in
+            let editAction = UIAction(title: "Редактировать", handler: { [weak self] _ in
                 // Handle action
             })
             
@@ -406,9 +406,9 @@ extension TrackersViewController: UICollectionViewDelegate {
                 guard let self = self else { return }
                 
                 let alertController = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
-                let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
-                    try! self.trackerStore.deleteTracker(tracker)
-                    self.showFirstStubScreen()
+                let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+                    try! self?.trackerStore.deleteTracker(tracker)
+                    self?.showFirstStubScreen()
                 }
                 alertController.addAction(deleteConfirmationAction)
                 

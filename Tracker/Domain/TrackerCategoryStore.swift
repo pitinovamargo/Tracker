@@ -63,12 +63,17 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
+    func updateCategory(category: TrackerCategory?, header: String) throws {
+        guard let fromDb = try self.fetchTrackerCategory(with: category) else { fatalError() }
+        fromDb.header = header
+        try context.save()
+    }
+    
     func addTrackerToCategory(to category: TrackerCategory?, tracker: Tracker) throws {
         guard let fromDb = try self.fetchTrackerCategory(with: category) else { fatalError() }
         fromDb.trackers = trackerCategories.first {
             $0.header == fromDb.header
         }?.trackers.map { $0.id }
-        print(type(of: fromDb.trackers))
         fromDb.trackers?.append(tracker.id)
         try context.save()
     }
