@@ -185,9 +185,8 @@ final class TrackersViewController: UIViewController {
                     return tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
                 })
             } else {
-                return TrackerCategory(header: category.header, trackers: category.trackers.map { tracker in
-                    let fromTrackers = trackers.first { $0.id == tracker.id }
-                    guard let fromTrackers = fromTrackers else { return }
+                return TrackerCategory(header: category.header, trackers: trackers.filter { tracker in
+                    let categoriesContains = category.trackers.contains { $0.id == tracker.id }
                     let pinnedContains = pinnedTrackers.contains{ $0.id == tracker.id }
                     let scheduleContains = tracker.schedule?.contains { day in
                         guard let currentDay = self.selectedDate else {
@@ -196,9 +195,7 @@ final class TrackersViewController: UIViewController {
                         return day.rawValue == currentDay
                     } ?? false
                     let titleContains = tracker.title.contains(self.filterText ?? "") || (self.filterText ?? "").isEmpty
-                    if scheduleContains && titleContains && !pinnedContains {
-                        return fromTrackers
-                    }
+                    return scheduleContains && titleContains && categoriesContains && !pinnedContains
                 })
             }
         }
