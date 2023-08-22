@@ -424,15 +424,20 @@ extension TrackersViewController: UICollectionViewDelegate {
                 guard let self = self,
                       let tracker = tracker
                 else { return }
-                let addHabit = HabitViewController()
+                let addHabit = HabitViewController(edit: true)
                 addHabit.trackersViewController = self
-                addHabit.editTracker(tracker: tracker, category: self.categories.first {
-                    $0.trackers.contains {
+                addHabit.editTracker(
+                    tracker: tracker,
+                    category: self.categories.first {
+                        $0.trackers.contains {
+                            $0.id == tracker.id
+                        }
+                    },
+                    completed: self.completedTrackers.filter {
                         $0.id == tracker.id
-                    }
-                })
+                    }.count
+                )
                 self.present(addHabit, animated: true)
-                // Handle action
             })
             
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
