@@ -82,6 +82,20 @@ final class StatisticViewController: UIViewController {
         view.addSubview(emptyStatisticText)
         view.addSubview(statisticTableView)
     }
+    
+    private func showPlaceholder() {
+        guard let trackersViewController = trackersViewController else { return }
+        
+        if trackersViewController.completedTrackers.count > 0 {
+            emptyStatistic.isHidden = true
+            emptyStatisticText.isHidden = true
+            statisticTableView.isHidden = false
+        } else {
+            emptyStatistic.isHidden = false
+            emptyStatisticText.isHidden = false
+            statisticTableView.isHidden = true
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -118,6 +132,8 @@ extension StatisticViewController: UITableViewDataSource {
         default:
             break
         }
+        
+        showPlaceholder()
         
         var count = ""
         
