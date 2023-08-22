@@ -12,6 +12,7 @@ final class TrackersViewController: UIViewController {
     private var trackerStore = TrackerStore()
     private var trackerRecordStore = TrackerRecordStore()
     private(set) var categoryViewModel: CategoryViewModel = CategoryViewModel.shared
+    private let analytics = Analytics.shared
     
     private var trackers: [Tracker] = []
     private var pinnedTrackers: [Tracker] = []
@@ -157,6 +158,16 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analytics.report("open", params: ["screen": "Main"])
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analytics.report("close", params: ["screen": "Main"])
+    }
+    
     private func addSubviews() {
         view.addSubview(header)
         view.addSubview(addTrackerButton)
@@ -171,6 +182,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTracker() {
+        analytics.report("click", params: ["screen": "Main", "item": "add_track"])
         let addTracker = AddTrackerViewController()
         addTracker.trackersViewController = self
         present(addTracker, animated: true, completion: nil)
@@ -182,7 +194,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func filtersButtonTapped() {
-
+        analytics.report("click", params: ["screen": "Main", "item": "filter"])
     }
     
     private func selectCurrentDay() {
@@ -344,6 +356,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             $0.id == tracker.id
         }.count
         cell.configure(tracker: tracker, isCompletedToday: isCompletedToday, completedDays: completedDays, indexPath: indexPath)
+        cell.backgroundColor = .clear
         
         return cell
     }
@@ -441,9 +454,11 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
             
             let editAction = UIAction(title: "Редактировать", handler: { [weak self] _ in
+                
                 guard let self = self,
                       let tracker = tracker
                 else { return }
+                self.analytics.report("click", params: ["screen": "Main", "item": "edit"])
                 let addHabit = HabitViewController(edit: true)
                 addHabit.trackersViewController = self
                 addHabit.editTracker(
@@ -462,7 +477,8 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                 guard let self = self else { return }
-                
+                self.analytics.report("click", params: ["screen": "Main", "item": "delete"])
+
                 let alertController = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
                 let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
                     try! self?.trackerStore.deleteTracker(tracker)

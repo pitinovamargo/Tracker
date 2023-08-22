@@ -19,6 +19,7 @@ final class TrackerCell: UICollectionViewCell {
     private var isCompletedToday: Bool = false
     private var trackerId: UUID?
     private var indexPath: IndexPath?
+    private let analytics = Analytics.shared
     
     private let trackersDaysAmount: UILabel = {
         let trackersDaysAmount = UILabel()
@@ -131,6 +132,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     @objc private func completedTracker() {
+        analytics.report("click", params: ["screen": "Main", "item": "track"])
         guard let trackerId = trackerId, let indexPath = indexPath else {
             assertionFailure("no trackerId")
             return
