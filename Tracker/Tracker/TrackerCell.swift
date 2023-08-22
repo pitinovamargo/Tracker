@@ -73,6 +73,13 @@ final class TrackerCell: UICollectionViewCell {
         return trackerEmoji
     }()
     
+    let pinnedTracker: UIImageView = {
+        let pinnedTracker = UIImageView()
+        pinnedTracker.image = UIImage(named: "Pin")
+        pinnedTracker.translatesAutoresizingMaskIntoConstraints = false
+        return pinnedTracker
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -89,6 +96,8 @@ final class TrackerCell: UICollectionViewCell {
             completedTrackerButton.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12),
             trackerEmoji.centerXAnchor.constraint(equalTo: emojiBackground.centerXAnchor),
             trackerEmoji.centerYAnchor.constraint(equalTo: emojiBackground.centerYAnchor),
+            pinnedTracker.centerYAnchor.constraint(equalTo: trackerEmoji.centerYAnchor),
+            pinnedTracker.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12)
         ])
     }
     
@@ -107,6 +116,8 @@ final class TrackerCell: UICollectionViewCell {
         
         let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
         completedTrackerButton.setImage(image, for: .normal)
+        
+        self.pinnedTracker.isHidden = tracker.pinned ? false : true
     }
     
     private func addSubviews() {
@@ -116,6 +127,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(emojiBackground)
         contentView.addSubview(trackerEmoji)
         contentView.addSubview(trackerDescription)
+        contentView.addSubview(pinnedTracker)
     }
     
     @objc private func completedTracker() {
@@ -128,5 +140,9 @@ final class TrackerCell: UICollectionViewCell {
         } else {
             delegate?.completeTracker(id: trackerId, at: indexPath)
         }
+    }
+    
+    func update(with pinned: UIImage) {
+        pinnedTracker.image = pinned
     }
 }
