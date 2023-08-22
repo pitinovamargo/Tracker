@@ -86,7 +86,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var addTrackerButton: UIButton = {
         let addTrackerButton = UIButton()
-        addTrackerButton.setImage(UIImage(named: "Add tracker"), for: .normal)
+        addTrackerButton.setImage(UIImage(named: "Add tracker")?.withTintColor(.ypBlackDay), for: .normal)
         addTrackerButton.translatesAutoresizingMaskIntoConstraints = false
         addTrackerButton.addTarget(self, action: #selector(didTapAddTracker), for: .touchUpInside)
         return addTrackerButton
@@ -105,7 +105,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         selectCurrentDay()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteDay
         addSubviews()
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
@@ -121,6 +121,7 @@ final class TrackersViewController: UIViewController {
         filterVisibleCategories()
         showFirstStubScreen()
         
+        collectionView.backgroundColor = .ypWhiteDay
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cell")

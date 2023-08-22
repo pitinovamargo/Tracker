@@ -11,13 +11,10 @@ extension UIColor {
     static var ypBlue: UIColor { UIColor(named: "Blue") ?? UIColor.blue }
     static var ypRed: UIColor { UIColor(named: "Red") ?? UIColor.red }
     static var ypBlackDay: UIColor { UIColor(named: "Black_day") ?? UIColor.black}
-    static var ypBlackNight: UIColor { UIColor(named: "Black_night") ?? UIColor.white}
     static var ypBackgroundDay: UIColor { UIColor(named: "Background_day") ?? UIColor.lightGray }
-    static var ypBackgroundNight: UIColor { UIColor(named: "Background_night") ?? UIColor.darkGray }
     static var ypGray: UIColor { UIColor(named: "Gray") ?? UIColor.gray }
     static var ypLightGray: UIColor { UIColor(named: "Light Gray") ?? UIColor.lightGray }
     static var ypWhiteDay: UIColor { UIColor(named: "White_day") ?? UIColor.white}
-    static var ypWhiteNight: UIColor { UIColor(named: "White_night") ?? UIColor.black}
     static var ypColorSelection1: UIColor { UIColor(named: "Color selection 1") ?? UIColor.red }
     static var ypColorSelection2: UIColor { UIColor(named: "Color selection 2") ?? UIColor.orange }
     static var ypColorSelection3: UIColor { UIColor(named: "Color selection 3") ?? UIColor.blue }

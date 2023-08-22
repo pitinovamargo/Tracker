@@ -47,9 +47,10 @@ final class StatisticViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteDay
         addSubviews()
         
+        statisticTableView.backgroundColor = .ypWhiteDay
         statisticTableView.delegate = self
         statisticTableView.dataSource = self
         statisticTableView.register(StatisticCell.self, forCellReuseIdentifier: cellReuseIdentifier)

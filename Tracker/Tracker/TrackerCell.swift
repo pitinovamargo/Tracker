@@ -35,7 +35,7 @@ final class TrackerCell: UICollectionViewCell {
         trackerDescription.frame = CGRect(x: 120, y: 106, width: 143, height: 34)
         trackerDescription.translatesAutoresizingMaskIntoConstraints = false
         trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        trackerDescription.textColor = .ypWhiteDay
+        trackerDescription.textColor = .white
         trackerDescription.numberOfLines = 0
         trackerDescription.lineBreakMode = .byWordWrapping
         trackerDescription.preferredMaxLayoutWidth = 143
@@ -60,7 +60,7 @@ final class TrackerCell: UICollectionViewCell {
     private let emojiBackground: UIView = {
         let emojiBackground = UIView()
         emojiBackground.frame = CGRect(x: 12, y: 12, width: 24, height: 24)
-        emojiBackground.backgroundColor = .ypWhiteDay
+        emojiBackground.backgroundColor = .white
         emojiBackground.layer.cornerRadius = emojiBackground.frame.width / 2
         emojiBackground.layer.opacity = 0.3
         return emojiBackground
