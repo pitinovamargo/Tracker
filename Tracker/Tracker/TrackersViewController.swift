@@ -390,7 +390,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - TrackerCellDelegate
+// MARK: - TrackerRecordStoreDelegate
 extension TrackersViewController: TrackerRecordStoreDelegate {
     func storeRecord() {
         completedTrackers = trackerRecordStore.trackerRecords
@@ -398,6 +398,7 @@ extension TrackersViewController: TrackerRecordStoreDelegate {
     }
 }
 
+// MARK: - TrackerCellDelegate
 extension TrackersViewController: TrackerCellDelegate {
     func completeTracker(id: UUID, at indexPath: IndexPath) {
         let currentDate = Date()

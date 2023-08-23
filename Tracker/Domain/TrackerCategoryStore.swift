@@ -103,6 +103,7 @@ final class TrackerCategoryStore: NSObject {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.storeCategory()

@@ -15,7 +15,7 @@ final class PreviewViewController: UIViewController {
             }
         }
     }
-
+    
     private let trackerDescription: UILabel = {
         let trackerDescription = UILabel()
         trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -46,7 +46,7 @@ final class PreviewViewController: UIViewController {
         return trackerEmoji
     }()
     
-    let pinnedTracker: UIImageView = {
+    private let pinnedTracker: UIImageView = {
         let pinnedTracker = UIImageView()
         pinnedTracker.image = UIImage(named: "Pin")
         pinnedTracker.translatesAutoresizingMaskIntoConstraints = false
@@ -55,33 +55,11 @@ final class PreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         addSubviews()
         setupConstraints()
     }
-
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            trackerCard.topAnchor.constraint(equalTo: view.topAnchor),
-            trackerCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            trackerCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            trackerCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            emojiBackground.topAnchor.constraint(equalTo: trackerCard.topAnchor, constant: 12),
-            emojiBackground.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
-            emojiBackground.widthAnchor.constraint(equalToConstant: 24),
-            emojiBackground.heightAnchor.constraint(equalTo: emojiBackground.widthAnchor),
-            
-            trackerEmoji.centerXAnchor.constraint(equalTo: emojiBackground.centerXAnchor),
-            trackerEmoji.centerYAnchor.constraint(equalTo: emojiBackground.centerYAnchor),
-            
-            trackerDescription.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
-            trackerDescription.bottomAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: -12),
-            pinnedTracker.centerYAnchor.constraint(equalTo: trackerEmoji.centerYAnchor),
-            pinnedTracker.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12)
-        ])
-    }
-     
+    
     func configureView(sizeForPreview: CGSize, tracker: Tracker) {
         previewSize = sizeForPreview
         trackerCard.backgroundColor = tracker.color
@@ -89,6 +67,25 @@ final class PreviewViewController: UIViewController {
         trackerDescription.text = tracker.title
         
         self.pinnedTracker.isHidden = tracker.pinned ? false : true
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            trackerCard.topAnchor.constraint(equalTo: view.topAnchor),
+            trackerCard.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trackerCard.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            trackerCard.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            emojiBackground.topAnchor.constraint(equalTo: trackerCard.topAnchor, constant: 12),
+            emojiBackground.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
+            emojiBackground.widthAnchor.constraint(equalToConstant: 24),
+            emojiBackground.heightAnchor.constraint(equalTo: emojiBackground.widthAnchor),
+            trackerEmoji.centerXAnchor.constraint(equalTo: emojiBackground.centerXAnchor),
+            trackerEmoji.centerYAnchor.constraint(equalTo: emojiBackground.centerYAnchor),
+            trackerDescription.leadingAnchor.constraint(equalTo: trackerCard.leadingAnchor, constant: 12),
+            trackerDescription.bottomAnchor.constraint(equalTo: trackerCard.bottomAnchor, constant: -12),
+            pinnedTracker.centerYAnchor.constraint(equalTo: trackerEmoji.centerYAnchor),
+            pinnedTracker.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12)
+        ])
     }
     
     private func addSubviews() {
