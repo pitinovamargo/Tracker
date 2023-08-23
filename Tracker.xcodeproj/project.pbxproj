@@ -50,6 +50,7 @@
 		64A32E2C2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 64A32E2A2A8517D90069D2D0 /* TrackersEntity.xcdatamodeld */; };
 		64BA8B752A956CDE007BE1F3 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BA8B742A956CDE007BE1F3 /* TrackerTests.swift */; };
 		64BA8B812A957123007BE1F3 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 64BA8B802A957123007BE1F3 /* SnapshotTesting */; };
+		64BA8B832A964F9A007BE1F3 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BA8B822A964F9A007BE1F3 /* PreviewViewController.swift */; };
 		64D0AB3C2A95514C0005472A /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D0AB3B2A95514C0005472A /* Analytics.swift */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,7 @@
 		64BA8B722A956CDE007BE1F3 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		64BA8B742A956CDE007BE1F3 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		64BA8B7B2A956E7B007BE1F3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		64BA8B822A964F9A007BE1F3 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		64D0AB3B2A95514C0005472A /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		6E7ECAEDBB6E7F4B05C3DCB3 /* Pods-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.release.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		E293673C08877CD29C6531FD /* Pods_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -287,6 +289,7 @@
 				647575632A589BF000C57C04 /* TrackersViewController.swift */,
 				6475756B2A5C2D6100C57C04 /* TrackerCell.swift */,
 				647575712A681CD800C57C04 /* HeaderSectionView.swift */,
+				64BA8B822A964F9A007BE1F3 /* PreviewViewController.swift */,
 				647575732A6B23EC00C57C04 /* AddTrackerViewController.swift */,
 				6406E9C72A825A17003DFB6B /* Habit */,
 				6406E9C82A825A2B003DFB6B /* Irregular Event */,
@@ -504,6 +507,7 @@
 				3411ADE52A86CD94006D21C9 /* TrackerCategoryStore.swift in Sources */,
 				647575742A6B23EC00C57C04 /* AddTrackerViewController.swift in Sources */,
 				64D0AB3C2A95514C0005472A /* Analytics.swift in Sources */,
+				64BA8B832A964F9A007BE1F3 /* PreviewViewController.swift in Sources */,
 				647575622A5899CF00C57C04 /* TabBarController.swift in Sources */,
 				6475757E2A6FD74200C57C04 /* IrregularEventViewController.swift in Sources */,
 				647575642A589BF000C57C04 /* TrackersViewController.swift in Sources */,

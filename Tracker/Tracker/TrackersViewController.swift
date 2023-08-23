@@ -438,27 +438,34 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+        
+        let tracker = self.visibleCategories[indexPath.section].trackers[indexPath.row]
+        
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: { [weak self] () -> UIViewController? in
+            guard let self = self else { return nil }
             
-            let tracker = self?.visibleCategories[indexPath.section].trackers[indexPath.row]
-            var pinAction: UIAction
-            if tracker?.pinned ?? false {
+            let previewVC = PreviewViewController()
+            let cellSize = CGSize(width: self.collectionView.bounds.width / 2 - 5, height: (self.collectionView.bounds.width / 2 - 5) * 0.55)
+            previewVC.configureView(sizeForPreview: cellSize, tracker: tracker)
+            
+            return previewVC
+        }) { [weak self] _ in
+            let pinAction: UIAction
+            if tracker.pinned {
                 pinAction = UIAction(title: "Открепить", handler: { [weak self] _ in
                     try! self?.trackerStore.pinTracker(tracker, value: false)
                 })
             } else {
-                pinAction = UIAction(title: tracker?.pinned ?? true ? "Открепить" : "Закрепить") { [weak self] _ in
+                pinAction = UIAction(title: "Закрепить", handler: { [weak self] _ in
                     try! self?.trackerStore.pinTracker(tracker, value: true)
-                }
+                })
             }
             
             let editAction = UIAction(title: "Редактировать", handler: { [weak self] _ in
-                
-                guard let self = self,
-                      let tracker = tracker
-                else { return }
+                guard let self = self else { return }
                 self.analytics.report("click", params: ["screen": "Main", "item": "edit"])
                 let addHabit = HabitViewController(edit: true)
                 addHabit.trackersViewController = self
@@ -474,12 +481,13 @@ extension TrackersViewController: UICollectionViewDelegate {
                     }.count
                 )
                 self.present(addHabit, animated: true)
+                
             })
             
             let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                 guard let self = self else { return }
                 self.analytics.report("click", params: ["screen": "Main", "item": "delete"])
-
+                
                 let alertController = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
                 let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
                     try! self?.trackerStore.deleteTracker(tracker)
@@ -495,7 +503,6 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
             
             let actions = [pinAction, editAction, deleteAction]
-            
             return UIMenu(title: "", children: actions)
         }
         
