@@ -1,5 +1,5 @@
 //
-//  CreatingTrackerViewCell.swift
+//  HabitViewCell.swift
 //  Tracker
 //
 //  Created by Margarita Pitinova on 24.07.2023.

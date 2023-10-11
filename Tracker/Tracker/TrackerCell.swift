@@ -19,6 +19,7 @@ final class TrackerCell: UICollectionViewCell {
     private var isCompletedToday: Bool = false
     private var trackerId: UUID?
     private var indexPath: IndexPath?
+    private let analytics = Analytics.shared
     
     private let trackersDaysAmount: UILabel = {
         let trackersDaysAmount = UILabel()
@@ -34,7 +35,7 @@ final class TrackerCell: UICollectionViewCell {
         trackerDescription.frame = CGRect(x: 120, y: 106, width: 143, height: 34)
         trackerDescription.translatesAutoresizingMaskIntoConstraints = false
         trackerDescription.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        trackerDescription.textColor = .ypWhiteDay
+        trackerDescription.textColor = .white
         trackerDescription.numberOfLines = 0
         trackerDescription.lineBreakMode = .byWordWrapping
         trackerDescription.preferredMaxLayoutWidth = 143
@@ -59,7 +60,7 @@ final class TrackerCell: UICollectionViewCell {
     private let emojiBackground: UIView = {
         let emojiBackground = UIView()
         emojiBackground.frame = CGRect(x: 12, y: 12, width: 24, height: 24)
-        emojiBackground.backgroundColor = .ypWhiteDay
+        emojiBackground.backgroundColor = .white
         emojiBackground.layer.cornerRadius = emojiBackground.frame.width / 2
         emojiBackground.layer.opacity = 0.3
         return emojiBackground
@@ -71,6 +72,13 @@ final class TrackerCell: UICollectionViewCell {
         trackerEmoji.translatesAutoresizingMaskIntoConstraints = false
         trackerEmoji.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return trackerEmoji
+    }()
+    
+    let pinnedTracker: UIImageView = {
+        let pinnedTracker = UIImageView()
+        pinnedTracker.image = UIImage(named: "Pin")
+        pinnedTracker.translatesAutoresizingMaskIntoConstraints = false
+        return pinnedTracker
     }()
     
     override init(frame: CGRect) {
@@ -89,6 +97,8 @@ final class TrackerCell: UICollectionViewCell {
             completedTrackerButton.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12),
             trackerEmoji.centerXAnchor.constraint(equalTo: emojiBackground.centerXAnchor),
             trackerEmoji.centerYAnchor.constraint(equalTo: emojiBackground.centerYAnchor),
+            pinnedTracker.centerYAnchor.constraint(equalTo: trackerEmoji.centerYAnchor),
+            pinnedTracker.trailingAnchor.constraint(equalTo: trackerCard.trailingAnchor, constant: -12)
         ])
     }
     
@@ -103,10 +113,12 @@ final class TrackerCell: UICollectionViewCell {
         self.trackerCard.backgroundColor = tracker.color
         trackerDescription.text = tracker.title
         trackerEmoji.text = tracker.emoji
-        trackersDaysAmount.text = formatCompletedDays(completedDays)
+        trackersDaysAmount.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), completedDays)
         
         let image = isCompletedToday ? (UIImage(named: "Tracker Done")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay)) : (UIImage(named: "Plus")?.withTintColor(trackerCard.backgroundColor ?? .ypWhiteDay))
         completedTrackerButton.setImage(image, for: .normal)
+        
+        self.pinnedTracker.isHidden = tracker.pinned ? false : true
     }
     
     private func addSubviews() {
@@ -116,26 +128,11 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(emojiBackground)
         contentView.addSubview(trackerEmoji)
         contentView.addSubview(trackerDescription)
-    }
-    
-    private func formatCompletedDays(_ completedDays: Int) -> String {
-        let lastDigit = completedDays % 10
-        let lastTwoDigits = completedDays % 100
-        if lastTwoDigits >= 11 && lastTwoDigits <= 19 {
-            return "\(completedDays) дней"
-        }
-        
-        switch lastDigit {
-        case 1:
-            return "\(completedDays) день"
-        case 2, 3, 4:
-            return "\(completedDays) дня"
-        default:
-            return "\(completedDays) дней"
-        }
+        contentView.addSubview(pinnedTracker)
     }
     
     @objc private func completedTracker() {
+        analytics.report("click", params: ["screen": "Main", "item": "track"])
         guard let trackerId = trackerId, let indexPath = indexPath else {
             assertionFailure("no trackerId")
             return
@@ -145,5 +142,9 @@ final class TrackerCell: UICollectionViewCell {
         } else {
             delegate?.completeTracker(id: trackerId, at: indexPath)
         }
+    }
+    
+    func update(with pinned: UIImage) {
+        pinnedTracker.image = pinned
     }
 }

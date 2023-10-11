@@ -81,6 +81,7 @@ final class TrackerRecordStore: NSObject {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.storeRecord()

@@ -26,8 +26,12 @@ final class CategoryViewModel {
         try! self.categoryStore.addNewCategory(TrackerCategory(header: toAdd, trackers: []))
     }
     
-    func addTrackerToCategory(to header: String?, tracker: Tracker) {
-        try! self.categoryStore.addTrackerToCategory(to: header, tracker: tracker)
+    func updateCategory(category: TrackerCategory?, header: String) {
+        try! self.categoryStore.updateCategory(category: category, header: header)
+    }
+    
+    func addTrackerToCategory(to category: TrackerCategory?, tracker: Tracker) {
+        try! self.categoryStore.addTrackerToCategory(to: category, tracker: tracker)
     }
     
     func selectCategory(_ at: Int) {

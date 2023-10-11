@@ -63,13 +63,25 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
-    func addTrackerToCategory(to header: String?, tracker: Tracker) throws {
-        guard let fromDb = try self.fetchTrackerCategory(with: header) else { fatalError() }
+    func updateCategory(category: TrackerCategory?, header: String) throws {
+        guard let fromDb = try self.fetchTrackerCategory(with: category) else { fatalError() }
+        fromDb.header = header
+        try context.save()
+    }
+    
+    func addTrackerToCategory(to category: TrackerCategory?, tracker: Tracker) throws {
+        guard let fromDb = try self.fetchTrackerCategory(with: category) else { fatalError() }
         fromDb.trackers = trackerCategories.first {
-            $0.header == header
+            $0.header == fromDb.header
         }?.trackers.map { $0.id }
-        print(type(of: fromDb.trackers))
         fromDb.trackers?.append(tracker.id)
+        try context.save()
+    }
+    
+    func deleteCategory(_ category: TrackerCategory?) throws {
+        let toDelete = try fetchTrackerCategory(with: category)
+        guard let toDelete = toDelete else { return }
+        context.delete(toDelete)
         try context.save()
     }
     
@@ -82,15 +94,16 @@ final class TrackerCategoryStore: NSObject {
         return TrackerCategory(header: header, trackers: trackerStore.trackers.filter { trackers.contains($0.id) })
     }
     
-    func fetchTrackerCategory(with header: String?) throws -> TrackerCategoryCoreData? {
-        guard let header = header else { fatalError() }
+    func fetchTrackerCategory(with category: TrackerCategory?) throws -> TrackerCategoryCoreData? {
+        guard let category = category else { fatalError() }
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "header == %@", header as CVarArg)
+        fetchRequest.predicate = NSPredicate(format: "header == %@", category.header as CVarArg)
         let result = try context.fetch(fetchRequest)
         return result.first
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.storeCategory()
