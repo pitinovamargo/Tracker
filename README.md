@@ -15,7 +15,7 @@ Application goals:
 - Using the calendar, the user can see what habits he has planned for a specific day.
 - The application has statistics that reflect the user's successful performance, progress and average values.
 
-Additional functionality is:
+Additional functionality:
 - localization
 - dark theme
 - onboarding screen
