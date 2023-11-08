@@ -42,4 +42,4 @@ The application supports iPhone X and higher and is adapted for iPhone SE.
 Minimum system version is iOS 13.4.
 
 ## Links ##
-[Дизайн Figma](https://www.figma.com/file/owAO4CAPTJdpM1BZU5JHv7/Tracker-(YP)?t=SZDLmkWeOPX4y6mp-0)
+[Design Figma](https://www.figma.com/file/owAO4CAPTJdpM1BZU5JHv7/Tracker-(YP)?t=SZDLmkWeOPX4y6mp-0)
