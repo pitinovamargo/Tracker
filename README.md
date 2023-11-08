@@ -39,6 +39,7 @@ Additional functionality:
 Installation and launch via Xcode. You need to install dependencies through CocoaPods (with the pod install command) and through Swift Package Manager (it will be installed automatically). To work with the project, you must run the .xcworkspace file.
 
 The application supports iPhone X and higher and is adapted for iPhone SE.
+
 Minimum system version is iOS 13.4.
 
 ## Links ##
